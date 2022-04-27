@@ -1,45 +1,22 @@
 package com.myungsang.myungsang_backend.user.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
 
 @Builder
 @Data
 public class UserVO {
+    @JsonProperty
     private long id;
+
+    @JsonProperty
     private String email;
+
+    @JsonProperty
     private String name;
+
+    @JsonProperty
     private String password;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

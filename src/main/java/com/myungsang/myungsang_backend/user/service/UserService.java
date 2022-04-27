@@ -15,8 +15,4 @@ public class UserService {
     }
 
     public UserIService mapper;
-
-    public List<UserVO> getUsers(){
-        return mapper.getUsers();
-    }
 }
