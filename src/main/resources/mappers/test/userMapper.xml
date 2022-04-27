@@ -3,6 +3,25 @@
 
 <mapper namespace="com.myungsang.myungsang_backend.user.iservice.UserIService">
     <select id="getUsers" resultType="com.myungsang.myungsang_backend.user.vo.UserVO">
-        SELECT * FROM myungsang_db.users;
+        SELECT *
+        FROM myungsang_db.users;
     </select>
+    <select id="getUser" resultType="com.myungsang.myungsang_backend.user.vo.UserVO">
+        SELECT *
+        FROM myungsang_db.users
+        WHERE id = #{id};
+    </select>
+    <insert id="saveUser">
+        INSERT INTO myungsang_db.users(name, email, password)
+        VALUES (#{name}, #{email}, #{password})
+    </insert>
+    <update id="updateUser" parameterType="com.myungsang.myungsang_backend.user.vo.UserVO">
+        UPDATE myungsang_db.users
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="item.email != null">email=#{item.email},</if>
+            <if test="item.name != null">name=#{item.name},</if>
+            <if test="item.password != null">password=#{item.password},</if>
+        </trim>
+        WHERE id=#{id}
+    </update>
 </mapper>

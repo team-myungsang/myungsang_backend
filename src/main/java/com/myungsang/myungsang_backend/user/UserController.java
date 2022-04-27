@@ -3,8 +3,7 @@ package com.myungsang.myungsang_backend.user;
 import com.myungsang.myungsang_backend.user.iservice.UserIService;
 import com.myungsang.myungsang_backend.user.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,7 +18,30 @@ public class UserController {
     UserIService userIService;
 
     @GetMapping("users")
-    public List<UserVO> test() {
+    public List<UserVO> getUsers() {
         return userIService.getUsers();
+    }
+
+    @GetMapping("users/{id}")
+    public UserVO getUser(@PathVariable("id") long id) {
+        return userIService.getUser(id);
+    }
+
+    @PostMapping("register")
+    @ResponseBody
+    public UserVO createUser(@RequestBody UserVO userVO) {
+        userIService.saveUser(userVO);
+
+        return null;
+    }
+
+    @PatchMapping("update/{id}")
+    @ResponseBody
+    public UserVO updateUser(@PathVariable("id") long id, @RequestBody UserVO userVO) {
+
+        System.out.println("userVO = " + userVO);
+        userIService.updateUser(userVO, id);
+
+        return null;
     }
 }
