@@ -1,5 +1,6 @@
 package com.myungsang.myungsang_backend.user.iservice;
 
+import com.myungsang.myungsang_backend.user.dto.UserDTO;
 import com.myungsang.myungsang_backend.user.vo.UserVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -14,7 +15,7 @@ public interface UserIService {
 
     UserVO getUser(long id);
 
-    void saveUser(UserVO userVO);
+    void saveUser(UserDTO userDTO);
 
-    void updateUser(@Param("item") UserVO userVO, @Param("id") long id);
+    void updateUser(@Param("item") UserDTO userDTO, @Param("id") long id);
 }

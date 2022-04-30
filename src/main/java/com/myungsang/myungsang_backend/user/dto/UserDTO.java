@@ -1,13 +1,10 @@
-package com.myungsang.myungsang_backend.user.vo;
+package com.myungsang.myungsang_backend.user.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
 import lombok.Data;
 
-@Builder
 @Data
-public class UserVO {
+public class UserDTO {
     @JsonProperty
     private long id;
 
@@ -17,6 +14,6 @@ public class UserVO {
     @JsonProperty
     private String name;
 
-    @JsonIgnore
+    @JsonProperty
     private String password;
 }
