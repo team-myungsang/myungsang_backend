@@ -1,5 +1,6 @@
 package com.myungsang.myungsang_backend.user;
 
+import com.myungsang.myungsang_backend.user.dto.UserDTO;
 import com.myungsang.myungsang_backend.user.iservice.UserIService;
 import com.myungsang.myungsang_backend.user.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,18 +30,17 @@ public class UserController {
 
     @PostMapping("register")
     @ResponseBody
-    public UserVO createUser(@RequestBody UserVO userVO) {
-        userIService.saveUser(userVO);
+    public UserVO createUser(@RequestBody UserDTO userDTO) {
+        userIService.saveUser(userDTO);
 
         return null;
     }
 
     @PatchMapping("update/{id}")
     @ResponseBody
-    public UserVO updateUser(@PathVariable("id") long id, @RequestBody UserVO userVO) {
+    public UserVO updateUser(@PathVariable("id") long id, @RequestBody UserDTO userDTO) {
 
-        System.out.println("userVO = " + userVO);
-        userIService.updateUser(userVO, id);
+        userIService.updateUser(userDTO, id);
 
         return null;
     }
