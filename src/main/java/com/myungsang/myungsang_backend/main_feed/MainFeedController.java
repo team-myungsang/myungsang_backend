@@ -19,7 +19,7 @@ public class MainFeedController {
 
     MainFeedIService mainFeedIService;
 
-    @GetMapping("feed")
+    @GetMapping("/main/videos")
     public List<MainFeedVO> getFeed() {
         return mainFeedIService.getFeed();
     }
