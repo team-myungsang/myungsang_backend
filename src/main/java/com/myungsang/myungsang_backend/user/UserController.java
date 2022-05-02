@@ -61,7 +61,10 @@ public class UserController {
         String fileName = "profile_" + timestamp;
         String fileExtension = StringUtils.getFilenameExtension(userProfileImage.getOriginalFilename());
 
-        FileVO fileVO = FileVO.builder().path(filePath).name(fileName).extension(fileExtension).build();
+        FileVO fileVO = null;
+        fileVO.setName(filePath);
+        fileVO.setName(fileName);
+        fileVO.setName(fileExtension);
 
         fileIService.saveFile(fileVO);
 
