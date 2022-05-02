@@ -25,11 +25,7 @@ dependencies {
 	// lombok
 	implementation		'org.projectlombok:lombok'
 	// https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-aws-autoconfigure
-	implementation group: 'org.springframework.cloud', name: 'spring-cloud-aws-autoconfigure', version: '2.2.6.RELEASE'
-
-	annotationProcessor('org.projectlombok:lombok')
-	testAnnotationProcessor('org.projectlombok:lombok')
-
+	// implementation group: 'org.springframework.cloud', name: 'spring-cloud-aws-autoconfigure', version: '2.2.6.RELEASE'
 }
 
 tasks.named('test') {

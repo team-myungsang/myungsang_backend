@@ -2,14 +2,43 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.myungsang.myungsang_backend.user.iservice.UserIService">
-    <select id="getUsers" resultType="com.myungsang.myungsang_backend.user.vo.UserVO">
-        SELECT *
-        FROM myungsang_db.users;
+    <resultMap id="userInfo" type="com.myungsang.myungsang_backend.user.vo.UserVO">
+        <id property="id" column="id"/>
+        <id property="email" column="email"/>
+        <id property="name" column="name"/>
+        <association property="file" javaType="com.myungsang.myungsang_backend.file.vo.FileVO" notNullColumn="file_id">
+            <result property="id" column="file_id"/>
+            <result property="name" column="file_name"/>
+            <result property="path" column="file_path"/>
+            <result property="extension" column="file_extension"/>
+            <result property="full_path" column="file_full_path"/>
+        </association>
+    </resultMap>
+    <select id="getUsers" resultType="com.myungsang.myungsang_backend.user.vo.UserVO" resultMap="userInfo">
+        SELECT users.id,
+               users.email,
+               users.name,
+               files.id                AS file_id,
+               files.name              AS file_name,
+               files.path              AS file_path,
+               files.extension         AS file_extension,
+               CONCAT('https://myungsang.s3.ap-northeast-2.amazonaws.com/uploads/', files.path, files.name, '.',
+                      files.extension) AS file_full_path
+        FROM myungsang_db.users as users
+                 LEFT JOIN files as files on files.id = users.file_id LIMIT 20;
+
     </select>
-    <select id="getUser" resultType="com.myungsang.myungsang_backend.user.vo.UserVO">
-        SELECT *
-        FROM myungsang_db.users
-        WHERE id = #{id};
+    <select id="getUser" resultType="com.myungsang.myungsang_backend.user.vo.UserVO" resultMap="userInfo">
+        SELECT users.id,
+               users.email,
+               users.name,
+               files.id        AS file_id,
+               files.name      AS file_name,
+               files.path      AS file_path,
+               files.extension AS file_extension
+        FROM myungsang_db.users as users
+                 LEFT JOIN files as files on files.id = users.file_id
+        WHERE users.id = #{id};
     </select>
     <insert id="saveUser">
         INSERT INTO myungsang_db.users(name, email, password)
