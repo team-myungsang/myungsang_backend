@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 
-@Builder @Data
 public class TestVO {
     private int id;
     private String name;

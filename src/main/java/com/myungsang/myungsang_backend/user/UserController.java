@@ -2,29 +2,33 @@ package com.myungsang.myungsang_backend.user;
 
 import com.myungsang.myungsang_backend.file.iservice.FileIService;
 import com.myungsang.myungsang_backend.file.vo.FileVO;
-import com.myungsang.myungsang_backend.user.dto.UserDTO;
+import com.myungsang.myungsang_backend.security.JwtServiceCreate;
 import com.myungsang.myungsang_backend.user.iservice.UserIService;
 import com.myungsang.myungsang_backend.user.vo.UserVO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
+@RequiredArgsConstructor
 @RestController
 public class UserController {
 
     @Autowired
-    public UserController(UserIService userIService, FileIService fileIService) {
-        this.userIService = userIService;
-        this.fileIService = fileIService;
-    }
-
-    UserIService userIService;
+    private UserIService userIService;
     FileIService fileIService;
+
+    @Autowired
+    private JwtServiceCreate jwtServiceCreate;
 
     @GetMapping("users")
     public List<UserVO> getUsers() {
@@ -36,19 +40,18 @@ public class UserController {
         return userIService.getUser(id);
     }
 
-    @PostMapping("register")
-    @ResponseBody
-    public UserVO createUser(@RequestBody UserDTO userDTO) {
-        userIService.saveUser(userDTO);
+    @PostMapping("/register")
+    public String register(@RequestBody UserVO userVO) {
+        userIService.register(userVO);
 
-        return null;
+        return "joinSuccess";
     }
 
     @PatchMapping("users/{id}")
     @ResponseBody
-    public UserVO updateUser(@PathVariable("id") long id, @RequestBody UserDTO userDTO) {
+    public UserVO updateUser(@PathVariable("id") long id, @RequestBody UserVO userVO) {
 
-        userIService.updateUser(userDTO, id);
+        userIService.updateUser(userVO, id);
 
         return null;
     }
@@ -69,5 +72,35 @@ public class UserController {
         fileIService.saveFile(fileVO);
 
         return null;
+    }
+
+    @PostMapping("/login")
+    public Map<String, Object> login(@RequestBody UserVO userVO, HttpServletResponse response) {
+//    public String login(@RequestBody UserVO userVO, HttpServletResponse response) {
+        UserVO resultUser = userIService.getUserByLogin(userVO);
+        Map<String, Object> tokens = jwtServiceCreate.createToken(resultUser);
+
+        Cookie cookie = new Cookie("refreshToken", tokens.get("refreshToken").toString());
+        cookie.setMaxAge(604800);
+        cookie.setSecure(true);
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        if(encoder.matches(userVO.getPassword(), resultUser.getPassword())) {
+            System.out.println("password correct!!!");
+        } else {
+            System.out.println("password wrong...");
+        }
+
+//        String SECRET_KEY = "vnsdlavnlksavnioerjwiobnrisodfhguowehrgnjdsflnlnbvoansiovnosdnolsdfnbgosenbodfb";
+//        System.out.println(tokens.get("accessToken").toString());
+//        System.out.println(jwtServiceCreate.decodeToken(tokens.get("accessToken").toString(), SECRET_KEY));
+
+        return tokens;
+//        return tokens.get("accessToken").toString();
+//        Map<String, Object> resultMap = new HashMap<String, Object>();
+//        resultMap.put("accessToken", tokens.get("accessToken"));
+//        return resultMap;
     }
 }

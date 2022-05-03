@@ -1,26 +1,15 @@
 package com.myungsang.myungsang_backend.user.vo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.myungsang.myungsang_backend.file.vo.FileVO;
-import lombok.Builder;
-import lombok.Data;
 
 public class UserVO {
-    @JsonProperty
     private long id;
-
-    @JsonProperty
     private String email;
-
-    @JsonProperty
     private String name;
-
-    @JsonIgnore
     private String password;
-
-    @JsonProperty
     private FileVO file;
+    private String accessToken;
+    private String refreshToken;
 
     public UserVO(long id, String email, String name, String password) {
         this.id = id;
@@ -59,5 +48,29 @@ public class UserVO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public FileVO getFile() {
+        return file;
+    }
+
+    public void setFile(FileVO file) {
+        this.file = file;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }

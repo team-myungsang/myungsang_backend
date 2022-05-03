@@ -11,7 +11,7 @@ import java.util.List;
 public class TestController {
 
     @Autowired
-    TestIService testIService;
+    private TestIService testIService;
 
     @GetMapping("test")
     public List<TestVO> test() {
