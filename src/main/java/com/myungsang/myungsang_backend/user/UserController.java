@@ -2,6 +2,8 @@ package com.myungsang.myungsang_backend.user;
 
 import com.myungsang.myungsang_backend.file.iservice.FileIService;
 import com.myungsang.myungsang_backend.file.vo.FileVO;
+import com.myungsang.myungsang_backend.file.vo.FileVOBuilder;
+import com.myungsang.myungsang_backend.service.S3Uploader;
 import com.myungsang.myungsang_backend.security.JwtServiceCreate;
 import com.myungsang.myungsang_backend.user.iservice.UserIService;
 import com.myungsang.myungsang_backend.user.vo.UserVO;
@@ -25,8 +27,16 @@ import java.util.Map;
 public class UserController {
 
     @Autowired
-    private UserIService userIService;
+    public UserController(S3Uploader s3Uploader, UserIService userIService, FileIService fileIService) {
+        this.s3Uploader = s3Uploader;
+        this.userIService = userIService;
+        this.fileIService = fileIService;
+    }
+
+    private final S3Uploader s3Uploader;
+    UserIService userIService;
     FileIService fileIService;
+
 
     @Autowired
     private JwtServiceCreate jwtServiceCreate;
@@ -65,12 +75,11 @@ public class UserController {
         String fileName = "profile_" + timestamp;
         String fileExtension = StringUtils.getFilenameExtension(userProfileImage.getOriginalFilename());
 
-        FileVO fileVO = null;
-        fileVO.setName(filePath);
-        fileVO.setName(fileName);
-        fileVO.setName(fileExtension);
+        FileVO fileVO = new FileVOBuilder().setPath(filePath).setName(fileName).setExtension(fileExtension).createFileVO();
 
         fileIService.saveFile(fileVO);
+
+        s3Uploader.upload(userProfileImage, "static");
 
         return null;
     }
