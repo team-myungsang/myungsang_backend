@@ -6,8 +6,6 @@ import com.myungsang.myungsang_backend.file.vo.FileVO;
 import lombok.Builder;
 import lombok.Data;
 
-@Builder
-@Data
 public class UserVO {
     @JsonProperty
     private long id;
