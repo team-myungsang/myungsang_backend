@@ -70,16 +70,11 @@ public class UserController {
     @PostMapping("users/{id}/profile_image")
     @ResponseBody
     public String uploadProfileImage(@PathVariable long id, @RequestParam("profile_image") MultipartFile userProfileImage) throws IOException {
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        String filePath = "/uploads/" + id + "/profile_images/";
-        String fileName = "profile_" + timestamp;
-        String fileExtension = StringUtils.getFilenameExtension(userProfileImage.getOriginalFilename());
+        String filePath = "uploads/users/" + id + "/profile_images" ;
+        FileVO file = s3Uploader.upload(userProfileImage, filePath);
+        fileIService.saveFile(file);
 
-        FileVO fileVO = new FileVOBuilder().setPath(filePath).setName(fileName).setExtension(fileExtension).createFileVO();
-
-        fileIService.saveFile(fileVO);
-
-        s3Uploader.upload(userProfileImage, "static");
+        userIService.updateUserFile(file.getId(), id);
 
         return null;
     }
@@ -97,7 +92,7 @@ public class UserController {
         response.addCookie(cookie);
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        if(encoder.matches(userVO.getPassword(), resultUser.getPassword())) {
+        if (encoder.matches(userVO.getPassword(), resultUser.getPassword())) {
             System.out.println("password correct!!!");
         } else {
             System.out.println("password wrong...");

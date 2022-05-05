@@ -5,6 +5,7 @@ public class FileVOBuilder {
     private String name;
     private String path;
     private String extension;
+    private String fullPath;
 
     public FileVOBuilder setId(long id) {
         this.id = id;
@@ -26,7 +27,17 @@ public class FileVOBuilder {
         return this;
     }
 
-    public FileVO createFileVO() {
-        return new FileVO(id, name, path, extension);
+    public String getFullPath() {
+        return fullPath;
     }
+
+    public FileVOBuilder setFullPath(String fullPath) {
+        this.fullPath = fullPath;
+        return this;
+    }
+
+    public FileVO createFileVO() {
+        return new FileVO(id, name, path, extension, fullPath);
+    }
+
 }
