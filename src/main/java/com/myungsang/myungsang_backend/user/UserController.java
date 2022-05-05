@@ -102,10 +102,10 @@ public class UserController {
 //        System.out.println(tokens.get("accessToken").toString());
 //        System.out.println(jwtServiceCreate.decodeToken(tokens.get("accessToken").toString(), SECRET_KEY));
 
-        return tokens;
+//        return tokens;
 //        return tokens.get("accessToken").toString();
-//        Map<String, Object> resultMap = new HashMap<String, Object>();
-//        resultMap.put("accessToken", tokens.get("accessToken"));
-//        return resultMap;
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("accessToken", tokens.get("accessToken"));
+        return resultMap;
     }
 }
