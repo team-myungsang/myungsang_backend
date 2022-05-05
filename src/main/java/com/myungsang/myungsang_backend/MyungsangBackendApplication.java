@@ -9,7 +9,7 @@ public class MyungsangBackendApplication {
 
     public static final String APPLICATION_LOCATIONS = "spring.config.location="
             + "classpath:application.properties,"
-            + "classpath:aws.yml";
+            + "classpath:aws.properties";
 
     public static void main(String[] args) {
         new SpringApplicationBuilder(MyungsangBackendApplication.class).properties(APPLICATION_LOCATIONS).run(args);
