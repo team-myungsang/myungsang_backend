@@ -37,7 +37,7 @@ jobs:
         echo cloud.aws.s3.bucket=myungsang >> aws.properties
         echo cloud.aws.region.static=ap-northeast-2 >> aws.properties
         echo cloud.aws.stack.auto=false >> aws.properties
-        cat .env
+        cat aws.properties
         
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
@@ -59,6 +59,7 @@ jobs:
         cp Procfile deploy/Procfile
         cp -r .ebextensions deploy/.ebextensions
         cp -r .platform deploy/.platform
+        cp aws.properties deploy/aws.properties
         cd deploy && zip -r deploy.zip .
         
     - name: Beanstalk Deploy
