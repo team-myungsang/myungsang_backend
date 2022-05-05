@@ -17,7 +17,7 @@ public class MyungsangBackendApplication {
             + "classpath:application.properties,";
 
     public static void main(String[] args) {
-        if (Objects.equals(System.getProperty("APP_ENV"), "production")) {
+        if (Objects.equals(System.getenv("APP_ENV"), "production")) {
             new SpringApplicationBuilder(MyungsangBackendApplication.class).properties(ELASTIC_BEANSTALK).run(args);
         } else {
             new SpringApplicationBuilder(MyungsangBackendApplication.class).properties(APPLICATION_LOCATIONS).run(args);
