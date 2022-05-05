@@ -59,6 +59,7 @@ jobs:
         cp Procfile deploy/Procfile
         cp -r .ebextensions deploy/.ebextensions
         cp -r .platform deploy/.platform
+        cp aws.properties deploy/aws.properties
         cd deploy && zip -r deploy.zip .
         
     - name: Beanstalk Deploy
