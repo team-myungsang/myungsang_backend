@@ -18,4 +18,9 @@ public class TestController {
         List<TestVO> testDataList = testIService.getTestData();
         return testDataList;
     }
+    @GetMapping("/")
+    public String hello() {
+        return "hello myungsang";
+    }
+
 }

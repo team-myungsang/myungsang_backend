@@ -13,15 +13,8 @@ public class MyungsangBackendApplication {
             + "classpath:application.properties,"
             + "classpath:aws.properties";
 
-    public static final String ELASTIC_BEANSTALK = "spring.config.location="
-            + "classpath:application.properties,";
-
     public static void main(String[] args) {
-        if (Objects.equals(System.getenv("APP_ENV"), "production")) {
-            new SpringApplicationBuilder(MyungsangBackendApplication.class).properties(ELASTIC_BEANSTALK).run(args);
-        } else {
-            new SpringApplicationBuilder(MyungsangBackendApplication.class).properties(APPLICATION_LOCATIONS).run(args);
-        }
+        SpringApplication.run(MyungsangBackendApplication.class, args);
 
     }
 
