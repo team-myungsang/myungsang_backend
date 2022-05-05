@@ -2,45 +2,50 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.myungsang.myungsang_backend.user.repository.UserIMapper">
+    <resultMap id="fileMap" type="com.myungsang.myungsang_backend.file.vo.FileVO">
+        <result property="id" column="file_id"/>
+        <result property="name" column="file_name"/>
+        <result property="path" column="file_path"/>
+        <result property="extension" column="file_extension"/>
+        <result property="fullPath" column="file_full_path"/>
+    </resultMap>
+
     <resultMap id="userMap" type="com.myungsang.myungsang_backend.user.vo.UserVO">
         <result property="id" column="id"/>
+        <result property="fileId" column="file_id"/>
         <result property="email" column="email"/>
         <result property="name" column="name"/>
         <result property="password" column="password"/>
         <result property="accessToken" column="access_token"/>
         <result property="refreshToken" column="refresh_token"/>
-        <association property="file" javaType="com.myungsang.myungsang_backend.file.vo.FileVO" notNullColumn="file_id">
-            <result property="id" column="file_id"/>
-            <result property="name" column="file_name"/>
-            <result property="path" column="file_path"/>
-            <result property="extension" column="file_extension"/>
-            <result property="full_path" column="file_full_path"/>
-        </association>
+        <association property="file" javaType="com.myungsang.myungsang_backend.file.vo.FileVO" resultMap="fileMap"
+                     notNullColumn="file_id"/>
     </resultMap>
     <select id="getUsers" resultMap="userMap">
-        SELECT users.id,
-               users.email,
-               users.name,
-               users.password,
-               users.refresh_token,
-               files.id                AS file_id,
-               files.name              AS file_name,
-               files.path              AS file_path,
-               files.extension         AS file_extension,
-               CONCAT('https://myungsang.s3.ap-northeast-2.amazonaws.com/uploads/', files.path, files.name, '.',
-                      files.extension) AS file_full_path
+        SELECT users.id            AS id,
+               users.email         AS email,
+               users.name          AS name,
+               users.password      AS password,
+               users.refresh_token AS refresh_token,
+               files.id            AS file_id,
+               files.name          AS file_name,
+               files.path          AS file_path,
+               files.extension     AS file_extension,
+               files.full_path     AS file_full_path
         FROM myungsang_db.users as users
                  LEFT JOIN files as files on files.id = users.file_id LIMIT 20;
 
     </select>
     <select id="getUser" resultMap="userMap">
-        SELECT users.id,
-               users.email,
-               users.name,
+        SELECT users.id        AS id,
+               users.email     AS email,
+               users.name      AS name,
+               users.password  AS password,
                files.id        AS file_id,
                files.name      AS file_name,
                files.path      AS file_path,
-               files.extension AS file_extension
+               files.extension AS file_extension,
+               files.full_path AS file_full_path
         FROM myungsang_db.users as users
                  LEFT JOIN files as files on files.id = users.file_id
         WHERE users.id = #{id};
@@ -57,6 +62,11 @@
             <if test="item.password != null">password=#{item.password},</if>
         </trim>
         WHERE id=#{id}
+    </update>
+    <update id="updateUserFile" parameterType="long">
+        UPDATE myungsang_db.users
+        SET file_id=#{file_id}
+        WHERE id = #{id}
     </update>
     <update id="saveRefreshToken" parameterType="com.myungsang.myungsang_backend.user.vo.UserVO">
         UPDATE myungsang_db.users

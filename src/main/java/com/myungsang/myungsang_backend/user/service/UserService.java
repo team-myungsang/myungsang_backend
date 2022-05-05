@@ -36,7 +36,12 @@ public class UserService implements UserIService {
 
     @Override
     public void updateUser(UserVO userVO, long id) {
+        userIMapper.updateUser(userVO, id);
+    }
 
+    @Override
+    public void updateUserFile(long fileId, long id) {
+        userIMapper.updateUserFile(fileId, id);
     }
 
     @Override

@@ -8,5 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Mapper
 public interface FileIService {
-    void saveFile(FileVO fileVO);
+    long saveFile(FileVO fileVO);
+
+    FileVO getFile(long fileId);
 }

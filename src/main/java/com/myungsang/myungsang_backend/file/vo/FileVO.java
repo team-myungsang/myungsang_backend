@@ -18,21 +18,14 @@ public class FileVO {
     private String extension;
 
     @JsonProperty
-    private String full_path;
+    private String fullPath;
 
-    public String getFull_path() {
-        return full_path;
-    }
-
-    public void setFull_path(String full_path) {
-        this.full_path = full_path;
-    }
-
-    public FileVO(long id, String name, String path, String extension) {
+    public FileVO(long id, String name, String path, String extension, String fullPath) {
         this.id = id;
         this.name = name;
         this.path = path;
         this.extension = extension;
+        this.fullPath = fullPath;
     }
 
     public long getId() {
@@ -65,5 +58,13 @@ public class FileVO {
 
     public void setExtension(String extension) {
         this.extension = extension;
+    }
+
+    public String getFullPath() {
+        return fullPath;
+    }
+
+    public void setFullPath(String fullPath) {
+        this.fullPath = fullPath;
     }
 }

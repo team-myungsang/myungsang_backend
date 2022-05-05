@@ -3,20 +3,21 @@ package com.myungsang.myungsang_backend.user.vo;
 import com.myungsang.myungsang_backend.file.vo.FileVO;
 
 public class UserVO {
-    private long id;
-    private String email;
-    private String name;
-    private String password;
-    private FileVO file;
-    private String accessToken;
-    private String refreshToken;
-
     public UserVO(long id, String email, String name, String password) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.password = password;
     }
+
+    private long id;
+    private long fileId;
+    private String email;
+    private String name;
+    private String password;
+    private String accessToken;
+    private String refreshToken;
+    private FileVO file;
 
     public long getId() {
         return id;
@@ -50,12 +51,12 @@ public class UserVO {
         this.password = password;
     }
 
-    public FileVO getFile() {
-        return file;
+    public long getFileId() {
+        return fileId;
     }
 
-    public void setFile(FileVO file) {
-        this.file = file;
+    public void setFileId(long fileId) {
+        this.fileId = fileId;
     }
 
     public String getAccessToken() {
@@ -72,5 +73,13 @@ public class UserVO {
 
     public void setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public FileVO getFile() {
+        return file;
+    }
+
+    public void setFile(FileVO file) {
+        this.file = file;
     }
 }
