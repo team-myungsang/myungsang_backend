@@ -25,6 +25,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin(origins = "*")
 public class UserController {
 
     @Autowired
