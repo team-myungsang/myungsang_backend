@@ -24,4 +24,3 @@ hs_err_pid*
 
 /src/main/resources/aws.yml
 /src/main/resources/aws.properties
-/src/main/resources/application.properties
