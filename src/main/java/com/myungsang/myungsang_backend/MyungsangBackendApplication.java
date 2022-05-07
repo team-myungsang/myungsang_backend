@@ -14,8 +14,7 @@ public class MyungsangBackendApplication {
             + "classpath:aws.properties";
 
     public static void main(String[] args) {
-        SpringApplication.run(MyungsangBackendApplication.class, args);
-
+        new SpringApplicationBuilder(MyungsangBackendApplication.class).properties(APPLICATION_LOCATIONS).run(args);
     }
 
 }
