@@ -27,11 +27,21 @@ public class UserService implements UserIService {
     }
 
     @Override
-    public void register(UserVO userVO) {
+    public String register(UserVO userVO) {
+        List<UserVO> emailAndNameList = userIMapper.getEmailAndNameList();
+        for(UserVO list: emailAndNameList) {
+            if(userVO.getEmail().equals(list.getEmail())) {
+                return "Same email exists";
+            } else if(userVO.getName().equals(list.getName())) {
+                return "Same name exists";
+            }
+        }
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String securePw = encoder.encode(userVO.getPassword());
         userVO.setPassword(securePw);
+        userVO.setType("Normal");
         userIMapper.register(userVO);
+        return "Register succeed";
     }
 
     @Override
@@ -52,5 +62,10 @@ public class UserService implements UserIService {
     @Override
     public UserVO getUserByLogin(UserVO userVO) {
         return userIMapper.getUserByLogin(userVO);
+    }
+
+    @Override
+    public UserVO getUserByRefreshToken(UserVO userVO) {
+        return userIMapper.getUserByRefreshToken(userVO);
     }
 }

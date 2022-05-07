@@ -16,16 +16,22 @@
         <result property="email" column="email"/>
         <result property="name" column="name"/>
         <result property="password" column="password"/>
+        <result property="type" column="type"/>
         <result property="accessToken" column="access_token"/>
         <result property="refreshToken" column="refresh_token"/>
         <association property="file" javaType="com.myungsang.myungsang_backend.file.vo.FileVO" resultMap="fileMap"
                      notNullColumn="file_id"/>
+    </resultMap>
+    <resultMap id="userEmailNameMap" type="com.myungsang.myungsang_backend.user.vo.UserVO">
+        <result property="email" column="email"/>
+        <result property="name" column="name"/>
     </resultMap>
     <select id="getUsers" resultMap="userMap">
         SELECT users.id            AS id,
                users.email         AS email,
                users.name          AS name,
                users.password      AS password,
+               users.type,
                users.refresh_token AS refresh_token,
                files.id            AS file_id,
                files.name          AS file_name,
@@ -41,6 +47,7 @@
                users.email     AS email,
                users.name      AS name,
                users.password  AS password,
+               users.type,
                files.id        AS file_id,
                files.name      AS file_name,
                files.path      AS file_path,
@@ -50,9 +57,14 @@
                  LEFT JOIN files as files on files.id = users.file_id
         WHERE users.id = #{id};
     </select>
+    <select id="getEmailAndNameList" resultMap="userEmailNameMap">
+        SELECT email,
+               name
+        FROM myungsang_db.users
+    </select>
     <insert id="register">
-        INSERT INTO myungsang_db.users(name, email, password)
-        VALUES (#{name}, #{email}, #{password})
+        INSERT INTO myungsang_db.users(name, email, password, type)
+        VALUES (#{name}, #{email}, #{password}, #{type})
     </insert>
     <update id="updateUser" parameterType="com.myungsang.myungsang_backend.user.vo.UserVO">
         UPDATE myungsang_db.users
@@ -77,5 +89,10 @@
         SELECT *
         FROM myungsang_db.users
         WHERE email = #{email};
+    </select>
+    <select id="getUserByRefreshToken" resultMap="userMap">
+        SELECT *
+        FROM myungsang_db.users
+        WHERE refresh_token = #{refreshToken};
     </select>
 </mapper>

@@ -15,9 +15,12 @@ public class UserVO {
     private String email;
     private String name;
     private String password;
+    private String type;
+    private FileVO file;
     private String accessToken;
     private String refreshToken;
-    private FileVO file;
+
+    public UserVO() {};
 
     public long getId() {
         return id;
@@ -49,6 +52,14 @@ public class UserVO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public long getFileId() {
