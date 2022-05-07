@@ -10,7 +10,6 @@ import java.util.Objects;
 public class MyungsangBackendApplication {
     public static void main(String[] args) {
         SpringApplication.run(MyungsangBackendApplication.class, args);
-
     }
 
 }
