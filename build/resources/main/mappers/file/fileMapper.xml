@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.myungsang.myungsang_backend.file.iservice.FileIService">
+    <resultMap id="fileMap" type="com.myungsang.myungsang_backend.file.vo.FileVO">
+        <result property="id" column="file_id"/>
+        <result property="name" column="file_name"/>
+        <result property="path" column="file_path"/>
+        <result property="extension" column="file_extension"/>
+        <result property="full_path" column="file_full_path"/>
+    </resultMap>
+
+    <select id="getFile" resultType="com.myungsang.myungsang_backend.file.vo.FileVO" resultMap="fileMap">
+        SELECT *
+        FROM myungsang_db.files
+        WHERE id = #{id};
+    </select>
+    <insert id="saveFile" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO myungsang_db.files(name, path, extension, full_path)
+        VALUES (#{name}, #{path}, #{extension}, #{fullPath})
+        <selectKey resultType="long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+</mapper>

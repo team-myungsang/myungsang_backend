@@ -31,12 +31,13 @@ jobs:
         
     - name: 'AWS S3 properties file'
       run: |
-        echo cloud.aws.credentials.accessKey=${{ secrets.AWS_S3_CREDENTIALS_ACCESS_KEY }} >> src/main/resources/application.properties
-        echo cloud.aws.credentials.secretKey=${{ secrets.AWS_S3_CREDENTIALS_SECRET_KEY }} >> src/main/resources/application.properties
-        echo cloud.aws.s3.bucket=myungsang >> src/main/resources/application.properties
-        echo cloud.aws.region.static=ap-northeast-2 >> src/main/resources/application.properties
-        echo cloud.aws.stack.auto=false >> src/main/resources/application.properties
-        cat src/main/resources/application.properties
+        touch src/main/resources/aws.properties
+        echo cloud.aws.credentials.accessKey=${{ secrets.AWS_S3_CREDENTIALS_ACCESS_KEY }} >> src/main/resources/aws.properties
+        echo cloud.aws.credentials.secretKey=${{ secrets.AWS_S3_CREDENTIALS_SECRET_KEY }} >> src/main/resources/aws.properties
+        echo cloud.aws.s3.bucket=myungsang >> src/main/resources/aws.properties
+        echo cloud.aws.region.static=ap-northeast-2 >> src/main/resources/aws.properties
+        echo cloud.aws.stack.auto=false >> src/main/resources/aws.properties
+        cat src/main/resources/aws.properties
         
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
