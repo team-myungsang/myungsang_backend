@@ -2,15 +2,29 @@ package com.myungsang.myungsang_backend.video.service;
 
 import com.myungsang.myungsang_backend.user.iservice.UserIService;
 import com.myungsang.myungsang_backend.video.iservice.VideoIService;
+import com.myungsang.myungsang_backend.video.repository.VideoIMapper;
+import com.myungsang.myungsang_backend.video.vo.VideoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class VideoService {
+public class VideoService implements VideoIService {
+
     @Autowired
-    public VideoService(VideoIService mapper) {
-        this.mapper = mapper;
+    private VideoIMapper videoIMapper;
+
+    @Override
+    public VideoVO getVideo(long id) {
+        return videoIMapper.getVideo(id);
     }
 
-    public VideoIService mapper;
+    @Override
+    public void clickLikeButton(VideoVO videoVO) {
+        videoIMapper.increaseLikeCnt(videoVO);
+    }
+
+    @Override
+    public void unclickLikeButton(VideoVO videoVO) {
+        videoIMapper.decreaseLikeCnt(videoVO);
+    }
 }
