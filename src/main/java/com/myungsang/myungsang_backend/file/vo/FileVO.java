@@ -5,19 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 
 public class FileVO {
-    @JsonProperty
+
     private long id;
-
-    @JsonProperty
     private String name;
-
-    @JsonProperty
     private String path;
-
-    @JsonProperty
     private String extension;
-
-    @JsonProperty
     private String fullPath;
 
     public FileVO(long id, String name, String path, String extension, String fullPath) {
