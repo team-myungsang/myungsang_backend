@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.myungsang.myungsang_backend.video.iservice.VideoIService">
-    <select id="getVideo" resultType="com.myungsang.myungsang_backend.video.vo.VideoVo">
+<mapper namespace="com.myungsang.myungsang_backend.video.repository.VideoIMapper">
+    <select id="getVideo" resultType="com.myungsang.myungsang_backend.video.vo.VideoVO">
         SELECT *
         FROM myungsang_db.videos
         WHERE id = #{id};
     </select>
+    <update id="increaseLikeCnt" parameterType="com.myungsang.myungsang_backend.video.vo.VideoVO">
+        UPDATE myungsang_db.videos
+        SET like_cnt = like_cnt + 1
+        WHERE id = #{id}
+    </update>
+    <update id="decreaseLikeCnt" parameterType="com.myungsang.myungsang_backend.video.vo.VideoVO">
+        UPDATE myungsang_db.videos
+        SET like_cnt = like_cnt - 1
+        WHERE id = #{id}
+    </update>
 </mapper>
