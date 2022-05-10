@@ -119,15 +119,15 @@ public class JwtService {
         }
         // RefreshToken 인증은 성공했지만 AccessToken이 만료되지 않은 경우 = AccessToken이 살아있는데 재발급 받으려는 경우 : 발급 불가 반환
         else if(acUserId.equals(Long.toString(resultUser.getId()))) {
-            map.put("msg", "AccessToken Already Valid.");
+            map.put("msg", "AccessToken already valid");
             map.put("status", 403);    // 발급 불가
         }
         // RefreshToken 유효 & AccessToken 유효한 값이지만 만료 => 재발급
         else {
             map.put("token", createAccessToken(String.valueOf(Long.toString(resultUser.getId())), ACCESS_TOKEN_EXP_TIME, SECRET_KEY));
             map.put("status", 200);
-            map.put("msg", "Access Token Updated Complete");
-            map.put("userId", userIdAccToken.get(0));
+            map.put("msg", "Access token updated complete");
+            map.put("userId", Long.toString(resultUser.getId()));
         }
 
         return map;
