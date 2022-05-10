@@ -2,7 +2,6 @@ package com.myungsang.myungsang_backend.user;
 
 import com.myungsang.myungsang_backend.file.iservice.FileIService;
 import com.myungsang.myungsang_backend.file.vo.FileVO;
-import com.myungsang.myungsang_backend.file.vo.FileVOBuilder;
 import com.myungsang.myungsang_backend.service.S3Uploader;
 import com.myungsang.myungsang_backend.security.JwtService;
 import com.myungsang.myungsang_backend.user.iservice.UserIService;
@@ -10,21 +9,22 @@ import com.myungsang.myungsang_backend.user.vo.UserVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class UserController {
 
     @Autowired
@@ -85,19 +85,21 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Map<String, Object> login(@RequestBody UserVO userVO, HttpServletResponse response) {
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> login(@RequestBody UserVO userVO, HttpServletResponse response) {
         UserVO resultUser = userIService.getUserByLogin(userVO);
         Map<String, Object> resultMap = new HashMap<String, Object>();
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         if(resultUser == null) {
-            resultMap.put("msg", "Wrong email");
-            return resultMap;
+            Map<String, Object> map = new HashMap<>();
+            map.put("message", "Wrong email");
+            return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
         } else if(!encoder.matches(userVO.getPassword(), resultUser.getPassword())) {
-            resultMap.put("msg", "Wrong password");
-            return resultMap;
+            Map<String, Object> map = new HashMap<>();
+            map.put("message", "Wrong password");
+            return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
         }
-
         Map<String, Object> tokens = jwtService.createToken(resultUser);
         Cookie cookie = new Cookie("refreshToken", tokens.get("refreshToken").toString());
         cookie.setMaxAge(Integer.parseInt(String.valueOf(REFRESH_TOKEN_EXP_TIME)) / 1000);
@@ -108,7 +110,7 @@ public class UserController {
         resultMap.put("msg", "Login succeed");
         resultMap.put("userId", resultUser.getId());
         resultMap.put("accessToken", tokens.get("accessToken"));
-        return resultMap;
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
     @PostMapping("/logout")

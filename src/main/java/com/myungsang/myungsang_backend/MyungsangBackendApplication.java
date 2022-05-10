@@ -8,14 +8,8 @@ import java.util.Objects;
 
 @SpringBootApplication
 public class MyungsangBackendApplication {
-
-    public static final String APPLICATION_LOCATIONS = "spring.config.location="
-            + "classpath:application.properties,"
-            + "classpath:aws.properties";
-
     public static void main(String[] args) {
         SpringApplication.run(MyungsangBackendApplication.class, args);
-
     }
 
 }

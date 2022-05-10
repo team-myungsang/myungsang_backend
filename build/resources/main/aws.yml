@@ -1,0 +1,11 @@
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIA2RAH4R467GS53V7Z
+      secretKey: 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
+    s3:
+      bucket: myungsang
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
