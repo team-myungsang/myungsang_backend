@@ -2,9 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.myungsang.myungsang_backend.interest_feed.repository.InterestFeedIMapper">
+    <resultMap id="videoMap" type="com.myungsang.myungsang_backend.video.vo.VideoVO">
+        <result property="id" column="id" />
+        <result property="userId" column="user_id" />
+        <result property="thumbnailId" column="thumbnail_id" />
+        <result property="likeCnt" column="like_cnt" />
+        <result property="view" column="view" />
+        <result property="title" column="title" />
+        <result property="content" column="content" />
+        <result property="createdAt" column="created_at" />
+        <result property="updatedAt" column="updated_at" />
+    </resultMap>
     <resultMap id="interestFeedResultMap" type="com.myungsang.myungsang_backend.interest_feed.vo.InterestFeedVO">
         <result property="id" column="id" />
-        <result property="userId" column="file_id" />
+        <result property="userId" column="user_id" />
         <result property="fileId" column="file_id" />
         <result property="createdAt" column="created_at" />
     </resultMap>
@@ -16,5 +27,22 @@
         DELETE FROM myungsang_db.like_tbl
         WHERE user_id = #{userId} and file_id = #{fileId}
     </delete>
+
+    <select id="getInterestFeed" resultMap="videoMap">
+        SELECT v.id,
+               v.user_id,
+               v.thumbnail_id,
+               v.like_cnt,
+               v.view,
+               v.title,
+               v.content,
+               v.created_at,
+               v.updated_at
+        FROM myungsang_db.videos v
+        JOIN myungsang_db.like_tbl l
+        ON v.id = l.file_id
+        WHERE l.user_id = #{userId}
+        ORDER BY l.created_at DESC
+    </select>
 </mapper>
 
