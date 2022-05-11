@@ -24,3 +24,7 @@ hs_err_pid*
 
 /src/main/resources/aws.yml
 /src/main/resources/aws.properties
+
+.idea
+.gradle
+.build
