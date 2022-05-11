@@ -10,6 +10,7 @@ public class VideoVO {
     private long path;
     private String createdAt;
     private String updatedAt;
+    private String content;
 
     public long getId() {
         return id;
@@ -81,5 +82,13 @@ public class VideoVO {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

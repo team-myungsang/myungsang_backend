@@ -2,7 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.myungsang.myungsang_backend.video.repository.VideoIMapper">
-    <select id="getVideo" resultType="com.myungsang.myungsang_backend.video.vo.VideoVO">
+    <resultMap id="videoMap" type="com.myungsang.myungsang_backend.video.vo.VideoVO">
+        <result property="id" column="id" />
+        <result property="userId" column="user_id" />
+        <result property="thumbnailId" column="thumbnail_id" />
+        <result property="likeCnt" column="like_cnt" />
+        <result property="view" column="view" />
+        <result property="title" column="title" />
+        <result property="content" column="content" />
+        <result property="createdAt" column="created_at" />
+        <result property="updatedAt" column="updated_at" />
+    </resultMap>
+    <select id="getVideo" resultMap="videoMap">
         SELECT *
         FROM myungsang_db.videos
         WHERE id = #{id};
