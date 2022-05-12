@@ -9,16 +9,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class FileService implements FileIService {
 
-    @Autowired
-    private FileIMapper fileIMapper;
+    private final FileIMapper fileIMapper;
 
     public FileService(FileIMapper fileIMapper) {
         this.fileIMapper = fileIMapper;
     }
 
     @Override
-    public long saveFile(FileVO fileVO) {
-        return fileIMapper.saveFile(fileVO);
+    public void saveFile(FileVO fileVO) {
+        fileIMapper.saveFile(fileVO);
     }
 
     @Override
