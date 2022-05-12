@@ -2,6 +2,7 @@ package com.myungsang.myungsang_backend.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.myungsang.myungsang_backend.file.vo.FileVO;
 import com.myungsang.myungsang_backend.file.vo.FileVOBuilder;
@@ -28,26 +29,33 @@ public class S3Uploader {
     public String bucket;  // S3 버킷 이름
 
     public FileVO upload(MultipartFile multipartFile, String dirName) throws IOException {
-        File uploadFile = convert(multipartFile)  // 파일 변환할 수 없으면 에러
-                .orElseThrow(() -> new IllegalArgumentException("error: MultipartFile -> File convert fail"));
         String extension = StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());
 
-        return upload(uploadFile, dirName, extension);
+
+        return upload(multipartFile, dirName, extension);
     }
 
     // S3로 파일 업로드하기
-    private FileVO upload(File uploadFile, String dirName, String extension) {
+    private FileVO upload(MultipartFile uploadFile, String dirName, String extension) {
         UUID uuid = UUID.randomUUID();
         String fileName = dirName + "/" + uuid;   // S3에 저장된 파일 이름
         String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
 
-        removeNewFile(uploadFile);
         return new FileVOBuilder().setName(uuid.toString()).setPath("/" + dirName + "/").setExtension(extension).setFullPath(uploadImageUrl).createFileVO();
     }
 
     // S3로 업로드
-    private String putS3(File uploadFile, String fileName) {
-        amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
+    private String putS3(MultipartFile uploadFile, String fileName) {
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentType(uploadFile.getContentType());
+        metadata.setContentLength(uploadFile.getSize());
+        try {
+            amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile.getInputStream(), metadata).withCannedAcl(CannedAccessControlList.PublicRead));
+
+        }catch (IOException e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
 
@@ -65,6 +73,11 @@ public class S3Uploader {
         String filePath = System.getProperty("user.dir") + "/temp/";
 
         File convertFile = new File(filePath + file.getOriginalFilename());
+
+        if (!convertFile.getParentFile().exists()) {
+            convertFile.getParentFile().mkdirs();
+        }
+
 
         if (convertFile.createNewFile()) { // 바로 위에서 지정한 경로에 File이 생성됨 (경로가 잘못되었다면 생성 불가능)
             try (FileOutputStream fos = new FileOutputStream(convertFile)) { // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
