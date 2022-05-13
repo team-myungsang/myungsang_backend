@@ -20,14 +20,10 @@ import java.util.Map;
 public class MainFeedController {
 
     @Autowired
-    public MainFeedController(MainFeedIService mainFeedIService) {
-        this.mainFeedIService = mainFeedIService;
-    }
-
     MainFeedIService mainFeedIService;
 
     @GetMapping("/main/videos")
-    public List<MainFeedVO> getFeed() {
-        return mainFeedIService.getFeed();
+    public List<MainFeedVO> mainVideos() {
+        return mainFeedIService.mainVideos();
     }
 }
