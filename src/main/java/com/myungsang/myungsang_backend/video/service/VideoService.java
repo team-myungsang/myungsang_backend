@@ -17,6 +17,14 @@ public class VideoService implements VideoIService {
     public VideoVO getVideo(long id) {
         return videoIMapper.getVideo(id);
     }
+    @Override
+    public void saveVideoFile(long id, long videoFileId) {
+        videoIMapper.saveVideoFile(id, videoFileId);
+    };
+    @Override
+    public void saveThumbnailFile(long id, long thumbnailFileId) {
+        videoIMapper.saveThumbnailFile(id, thumbnailFileId);
+    };
 
     @Override
     public void clickLikeButton(VideoVO videoVO) {

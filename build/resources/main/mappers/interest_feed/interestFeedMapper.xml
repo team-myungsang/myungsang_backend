@@ -31,7 +31,7 @@
     <select id="getInterestFeed" resultMap="videoMap">
         SELECT v.id,
                v.user_id,
-               v.thumbnail_id,
+               v.thumbnail_file_id,
                v.like_cnt,
                v.view,
                v.title,

@@ -3,6 +3,8 @@ package com.myungsang.myungsang_backend.video.vo;
 public class VideoVO {
     private long id;
     private long userId;
+    private long VideoFileId;
+    private long thumbnailFileId;
     private String title;
     private int likeCnt;
     private int view;
@@ -26,6 +28,22 @@ public class VideoVO {
 
     public void setUserId(long userId) {
         this.userId = userId;
+    }
+
+    public long getThumbnailFileId() {
+        return thumbnailFileId;
+    }
+
+    public void setThumbnailFileId(long thumbnailFileId) {
+        this.thumbnailFileId = thumbnailFileId;
+    }
+
+    public long getVideoFileId() {
+        return VideoFileId;
+    }
+
+    public void setVideoFileId(long videoFileId) {
+        VideoFileId = videoFileId;
     }
 
     public String getTitle() {
