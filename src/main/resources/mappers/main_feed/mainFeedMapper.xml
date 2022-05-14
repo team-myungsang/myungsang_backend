@@ -38,8 +38,8 @@
         <id property="likeCnt" column="like_cnt"/>
         <id property="view" column="view"/>
         <id property="path" column="path"/>
-        <id property="createdAt" column="created_at"/>
-        <id property="updatedAt" column="updated_at"/>
+        <id property="created_at" column="created_at"/>
+        <id property="updated_at" column="updated_at"/>
         <id property="showId" column="show_id"/>
         <association property="user" javaType="com.myungsang.myungsang_backend.user.vo.UserVO">
             <result property="id" column="user_id"/>
