@@ -20,7 +20,7 @@ public class MainFeedDTO {
     private FileVO thumbnail_file;
 
     @JsonProperty
-    private int like;
+    private int likeCnt;
 
     @JsonProperty
     private int view;
