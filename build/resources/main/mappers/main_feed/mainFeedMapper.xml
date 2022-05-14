@@ -1,34 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.myungsang.myungsang_backend.main_feed.iservice.MainFeedIService">
-    <resultMap id="feedVideo" type="com.myungsang.myungsang_backend.main_feed.vo.MainFeedVO">
+<mapper namespace="com.myungsang.myungsang_backend.main_feed.repository.MainFeedIMapper">
+    <resultMap id="feedVideoResultMap" type="com.myungsang.myungsang_backend.main_feed.vo.MainFeedVO">
         <id property="id" column="id"/>
         <id property="title" column="title"/>
-        <id property="like" column="like"/>
+        <id property="likeCnt" column="like_cnt"/>
         <id property="view" column="view"/>
         <id property="path" column="path"/>
-        <id property="created_at" column="created_at"/>
-        <id property="updated_at" column="updated_at"/>
+        <id property="createdAt" column="created_at"/>
+        <id property="updatedAt" column="updated_at"/>
+        <id property="showId" column="show_id"/>
         <association property="user" javaType="com.myungsang.myungsang_backend.user.vo.UserVO">
             <result property="id" column="user_id"/>
             <result property="email" column="user_email"/>
             <result property="name" column="user_name"/>
         </association>
     </resultMap>
-    <select id="getFeed" resultType="com.myungsang.myungsang_backend.main_feed.vo.MainFeedVO" resultMap="feedVideo">
+    <select id="mainVideos" resultMap="feedVideoResultMap">
         SELECT videos.id,
                videos.title,
-               videos.like,
+               videos.like_cnt,
                videos.view,
                videos.created_at,
                videos.updated_at,
+               videos.show_id,
                users.id    AS user_id,
                users.email AS user_email,
                users.name  AS user_name
         FROM myungsang_db.videos
                  JOIN users on users.id = videos.user_id
-        LIMIT 10;
+        ORDER BY videos.show_id;
     </select>
 </mapper>
 

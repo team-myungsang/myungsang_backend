@@ -15,7 +15,7 @@ public class MainFeedVO {
     private long path;
     private String createdAt;
     private String updatedAt;
-    private String showId;
+    private long showId;
 
     public long getId() {
         return id;
@@ -81,11 +81,11 @@ public class MainFeedVO {
         this.updatedAt = updatedAt;
     }
 
-    public String getShowId() {
+    public long getShowId() {
         return showId;
     }
 
-    public void setShowId(String showId) {
+    public void setShowId(long showId) {
         this.showId = showId;
     }
 }
