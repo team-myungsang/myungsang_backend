@@ -11,6 +11,9 @@ public interface UserIMapper {
 
     List<UserVO> getUsers();
     UserVO getUser(long id);
+    List<UserVO> checkEmail(String email);
+    List<UserVO> checkName(String name);
+    void updateName(UserVO userVO);
     List<UserVO> getEmailAndNameList();
     void register(UserVO userVO);
     void updateUser(@Param("item") UserVO userVO, @Param("id") long id);

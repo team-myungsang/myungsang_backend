@@ -10,6 +10,9 @@ import java.util.List;
 public interface UserIService {
     List<UserVO> getUsers();
     UserVO getUser(long id);
+    String checkEmail(String email);
+    String checkName(String name);
+    String updateName(UserVO userVO);
     String register(UserVO userVO);
     void updateUser(@Param("item") UserVO userVO, @Param("id") long id);
     void updateUserFile(@Param("file_id") long fileId, @Param("id") long id);

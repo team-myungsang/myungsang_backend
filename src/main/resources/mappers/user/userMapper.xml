@@ -57,6 +57,19 @@
                  LEFT JOIN files as files on files.id = users.file_id
         WHERE users.id = #{id};
     </select>
+    <select id="checkEmail" resultMap="userMap">
+        SELECT * FROM myungsang_db.users
+        WHERE email = #{email}
+    </select>
+    <select id="checkName" resultMap="userMap">
+        SELECT * FROM myungsang_db.users
+        WHERE name = #{name}
+    </select>
+    <update id="updateName" parameterType="com.myungsang.myungsang_backend.user.vo.UserVO">
+        UPDATE myungsang_db.users
+        SET name = #{name}
+        WHERE id = #{id}
+    </update>
     <select id="getEmailAndNameList" resultMap="userEmailNameMap">
         SELECT email,
                name

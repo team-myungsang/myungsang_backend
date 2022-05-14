@@ -55,6 +55,30 @@ public class UserController {
         return userIService.getUser(id);
     }
 
+    @PostMapping("checkEmail")
+    public Map<String, Object> checkEmail(@RequestBody UserVO userVO) {
+        String msg = userIService.checkEmail(userVO.getEmail());
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("msg", msg);
+        return resultMap;
+    }
+
+    @PostMapping("checkName")
+    public Map<String, Object> checkName(@RequestBody UserVO userVO) {
+        String msg = userIService.checkName(userVO.getName());
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("msg", msg);
+        return resultMap;
+    }
+
+    @PostMapping("updateName")
+    public Map<String, Object> updateName(@RequestBody UserVO userVO) {
+        String msg = userIService.updateName(userVO);
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("msg", msg);
+        return resultMap;
+    }
+
     @PostMapping("/register")
     public Map<String, Object> register(@RequestBody UserVO userVO) {
         String msg = userIService.register(userVO);
