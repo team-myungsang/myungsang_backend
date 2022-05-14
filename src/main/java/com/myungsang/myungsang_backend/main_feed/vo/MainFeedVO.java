@@ -5,30 +5,87 @@ import com.myungsang.myungsang_backend.user.vo.UserVO;
 import lombok.Builder;
 import lombok.Data;
 
-@Builder
-@Data
 public class MainFeedVO {
-    @JsonProperty
+
     private long id;
-
-    @JsonProperty
     private UserVO user;
-
-    @JsonProperty
     private String title;
-
-    @JsonProperty
-    private int like;
-
-    @JsonProperty
+    private int likeCnt;
     private int view;
-
-    @JsonProperty
     private long path;
+    private String createdAt;
+    private String updatedAt;
+    private long showId;
 
-    @JsonProperty
-    private String created_at;
+    public long getId() {
+        return id;
+    }
 
-    @JsonProperty
-    private String updated_at;
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public UserVO getUser() {
+        return user;
+    }
+
+    public void setUser(UserVO user) {
+        this.user = user;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public int getLikeCnt() {
+        return likeCnt;
+    }
+
+    public void setLikeCnt(int likeCnt) {
+        this.likeCnt = likeCnt;
+    }
+
+    public int getView() {
+        return view;
+    }
+
+    public void setView(int view) {
+        this.view = view;
+    }
+
+    public long getPath() {
+        return path;
+    }
+
+    public void setPath(long path) {
+        this.path = path;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public long getShowId() {
+        return showId;
+    }
+
+    public void setShowId(long showId) {
+        this.showId = showId;
+    }
 }

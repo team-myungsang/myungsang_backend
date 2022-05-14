@@ -1,10 +1,10 @@
 package com.myungsang.myungsang_backend.main_feed.repository;
 
+
 import com.myungsang.myungsang_backend.main_feed.dto.MainFeedDTO;
 import com.myungsang.myungsang_backend.main_feed.vo.MainFeedVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
 @Mapper

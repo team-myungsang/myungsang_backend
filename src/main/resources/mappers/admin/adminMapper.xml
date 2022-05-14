@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.myungsang.myungsang_backend.admin.repository.AdminIMapper">
+
+    <update id="AdminUpdateShowId" parameterType="com.myungsang.myungsang_backend.admin.vo.AdminVO">
+        UPDATE myungsang_db.videos
+        SET show_id = #{afterShowId}
+        WHERE show_id = #{beforeShowId}
+    </update>
+</mapper>

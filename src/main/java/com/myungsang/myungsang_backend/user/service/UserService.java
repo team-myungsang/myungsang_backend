@@ -27,6 +27,37 @@ public class UserService implements UserIService {
     }
 
     @Override
+    public String checkEmail(String email) {
+        List<UserVO> resultList = userIMapper.checkEmail(email);
+        if(resultList.isEmpty()) {
+            return "Email check complete";
+        } else {
+            return "Same email exists";
+        }
+    }
+
+    @Override
+    public String checkName(String name) {
+        List<UserVO> resultList = userIMapper.checkName(name);
+        if(resultList.isEmpty()) {
+            return "Name check complete";
+        } else {
+            return "Same name exists";
+        }
+    }
+
+    @Override
+    public String updateName(UserVO userVO) {
+        List<UserVO> resultList = userIMapper.checkName(userVO.getName());
+        if(resultList.isEmpty()) {
+            userIMapper.updateName(userVO);
+            return "Name update succeed";
+        } else {
+            return "Same name exists";
+        }
+    }
+
+    @Override
     public String register(UserVO userVO) {
         List<UserVO> emailAndNameList = userIMapper.getEmailAndNameList();
         for(UserVO list: emailAndNameList) {
