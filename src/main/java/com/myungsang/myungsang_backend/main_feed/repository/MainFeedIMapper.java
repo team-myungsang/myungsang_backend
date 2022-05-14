@@ -15,4 +15,6 @@ public interface MainFeedIMapper {
             @Param("page_index") int page_index,
             @Param("page_count") int page_count
     );
+
+    List<MainFeedVO> mainVideos();
 }
