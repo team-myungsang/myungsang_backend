@@ -19,7 +19,7 @@ public class JwtService {
     private UserIService userIService;
 
     @Value("${security.expire.accesstoken}")
-    private Long ACCESS_TOKEN_EXP_TIME;     //            // 30분 기준
+    private Long ACCESS_TOKEN_EXP_TIME;     //            // 20분 기준
 
     @Value("${security.expire.refreshtoken}")
     private Long REFRESH_TOKEN_EXP_TIME;     //           // 7일 기준
@@ -109,7 +109,7 @@ public class JwtService {
     public Map<String, Object> validRefreshToken(UserVO userVO) {
         Map<String, Object> map = new HashMap<>();
 
-        String acUserId = decodeToken(userVO);    // AccessToken을 통해 userId를 추출한다. -> 만료라면 "expire" 반환
+//        String acUserId = decodeToken(userVO);    // AccessToken을 통해 userId를 추출한다. -> 만료라면 "expire" 반환
         UserVO resultUser = userIService.getUserByRefreshToken(userVO);
         List<Object> userIdAccToken = new ArrayList<Object>();         // redis로 부터 key(refreshToken)를 통해 userId & First AccessToken(rfToken 복호화에 사용)을 가져온다.
 
@@ -117,15 +117,16 @@ public class JwtService {
             map.put("msg", "RefreshToken has been expired");
             map.put("status", 401);
         }
-        // RefreshToken 인증은 성공했지만 AccessToken이 만료되지 않은 경우 = AccessToken이 살아있는데 재발급 받으려는 경우 : 발급 불가 반환
-        else if(acUserId.equals(Long.toString(resultUser.getId()))) {
-            map.put("msg", "AccessToken already valid");
-            map.put("status", 403);    // 발급 불가
-        }
+//        // RefreshToken 인증은 성공했지만 AccessToken이 만료되지 않은 경우 = AccessToken이 살아있는데 재발급 받으려는 경우 : 발급 불가 반환
+//        else if(acUserId.equals(Long.toString(resultUser.getId()))) {
+//            map.put("msg", "AccessToken already valid");
+//            map.put("status", 403);    // 발급 불가
+//        }
         // RefreshToken 유효 & AccessToken 유효한 값이지만 만료 => 재발급
         else {
             map.put("token", createAccessToken(String.valueOf(Long.toString(resultUser.getId())), ACCESS_TOKEN_EXP_TIME, SECRET_KEY));
             map.put("status", 200);
+            map.put("expTime", ACCESS_TOKEN_EXP_TIME);
             map.put("msg", "Access token updated complete");
             map.put("userId", Long.toString(resultUser.getId()));
         }

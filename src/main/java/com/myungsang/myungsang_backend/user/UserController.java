@@ -42,6 +42,9 @@ public class UserController {
     @Autowired
     private JwtService jwtService;
 
+    @Value("${security.expire.accesstoken}")
+    private Long ACCESS_TOKEN_EXP_TIME;     //            // 20분 기준
+
     @Value("${security.expire.refreshtoken}")
     private Long REFRESH_TOKEN_EXP_TIME;     //           // 7일 기준
 
@@ -134,6 +137,7 @@ public class UserController {
         resultMap.put("msg", "Login succeed");
         resultMap.put("userId", resultUser.getId());
         resultMap.put("accessToken", tokens.get("accessToken"));
+        resultMap.put("expTime", ACCESS_TOKEN_EXP_TIME);
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
