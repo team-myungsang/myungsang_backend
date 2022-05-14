@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface FileIMapper {
-    long saveFile(FileVO fileVO);
+    void saveFile(FileVO fileVO);
 
     FileVO getFile(long id);
 }

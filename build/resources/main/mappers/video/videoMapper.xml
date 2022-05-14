@@ -18,6 +18,16 @@
         FROM myungsang_db.videos
         WHERE id = #{id};
     </select>
+    <update id="saveVideoFile" parameterType="long">
+        UPDATE myungsang_db.videos
+        SET video_file_id=#{video_file_id}
+        WHERE id = #{id}
+    </update>
+    <update id="saveThumbnailFile" parameterType="long">
+        UPDATE myungsang_db.videos
+        SET thumbnail_file_id=#{thumbnail_file_id}
+        WHERE id = #{id}
+    </update>
     <update id="increaseLikeCnt" parameterType="com.myungsang.myungsang_backend.video.vo.VideoVO">
         UPDATE myungsang_db.videos
         SET like_cnt = like_cnt + 1

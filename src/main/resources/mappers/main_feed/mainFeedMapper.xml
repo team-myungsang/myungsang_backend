@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.myungsang.myungsang_backend.main_feed.repository.MainFeedIMapper">
-    <resultMap id="feedVideoResultMap" type="com.myungsang.myungsang_backend.main_feed.vo.MainFeedVO">
+    <resultMap id="feedVideo" type="com.myungsang.myungsang_backend.main_feed.dto.MainFeedDTO">
         <id property="id" column="id"/>
         <id property="title" column="title"/>
         <id property="likeCnt" column="like_cnt"/>
@@ -16,21 +16,40 @@
             <result property="email" column="user_email"/>
             <result property="name" column="user_name"/>
         </association>
+        <association property="thumbnail_file" javaType="com.myungsang.myungsang_backend.file.vo.FileVO"
+                     notNullColumn="file_id">
+            <result property="id" column="file_id"/>
+            <result property="name" column="file_name"/>
+            <result property="path" column="file_path"/>
+            <result property="extension" column="file_extension"/>
+            <result property="fullPath" column="file_full_path"/>
+        </association>
     </resultMap>
-    <select id="mainVideos" resultMap="feedVideoResultMap">
-        SELECT videos.id,
-               videos.title,
-               videos.like_cnt,
-               videos.view,
-               videos.created_at,
-               videos.updated_at,
-               videos.show_id,
-               users.id    AS user_id,
-               users.email AS user_email,
-               users.name  AS user_name
-        FROM myungsang_db.videos
-                 JOIN users on users.id = videos.user_id
-        ORDER BY videos.show_id;
+    <select id="getFeed" resultType="com.myungsang.myungsang_backend.main_feed.dto.MainFeedDTO" resultMap="feedVideo"
+            parameterType="long">
+        SELECT
+        v.id,
+        v.title,
+        v.like_cnt,
+        v.view,
+        v.created_at,
+        v.updated_at,
+        u.id AS user_id,
+        u.email AS user_email,
+        u.name AS user_name,
+        f.id AS file_id,
+        f.name AS file_name,
+        f.path AS file_path,
+        f.extension AS file_extension,
+        f.full_path AS file_full_path
+        FROM myungsang_db.videos v
+        JOIN users u on v.user_id = u.id
+        LEFT JOIN files f on v.thumbnail_file_id = f.id
+        LEFT JOIN video_category vc on v.id = vc.video_id
+        LEFT JOIN categories c on vc.category_id = c.id
+        <if test="category_id != 0">WHERE category_id = #{category_id}</if>
+        <if test="page_count != -1">LIMIT #{page_count}</if>
+        <if test="page_index != -1">OFFSET #{page_index}</if>
     </select>
 </mapper>
 
