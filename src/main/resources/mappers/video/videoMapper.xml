@@ -18,6 +18,12 @@
         FROM myungsang_db.videos
         WHERE id = #{id};
     </select>
+    <insert id="saveVideo" parameterType="VideoVO">
+        INSERT INTO myungsang_db.videos(user_id, title, content) values (#{userId}, #{title}, #{content})
+        <selectKey resultType="long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
     <update id="saveVideoFile" parameterType="long">
         UPDATE myungsang_db.videos
         SET video_file_id=#{video_file_id}

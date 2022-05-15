@@ -3,9 +3,11 @@ package com.myungsang.myungsang_backend.security;
 import com.myungsang.myungsang_backend.user.iservice.UserIService;
 import com.myungsang.myungsang_backend.user.vo.UserVO;
 import io.jsonwebtoken.*;
+import org.apache.logging.log4j.util.Base64Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Base64Utils;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
@@ -92,6 +94,24 @@ public class JwtService {
                     .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
                     .build()
                     .parseClaimsJws(userVO.getAccessToken())
+                    .getBody();
+
+            return claims.getSubject();
+        }catch(ExpiredJwtException e1){
+            e1.printStackTrace();
+            return "expire";
+        }catch(JwtException e2){
+            e2.printStackTrace();
+            return "invalid";
+        }
+    }
+
+    public String decodeTokenByHeaderString(String accessToken) {
+        try{
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
+                    .build()
+                    .parseClaimsJws(accessToken)
                     .getBody();
 
             return claims.getSubject();

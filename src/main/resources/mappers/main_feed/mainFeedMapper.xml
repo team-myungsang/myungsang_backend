@@ -58,28 +58,29 @@
     <select id="getFeed" resultType="com.myungsang.myungsang_backend.main_feed.dto.MainFeedDTO" resultMap="feedVideo"
             parameterType="long">
         SELECT
-        v.id,
-        v.title,
-        v.like_cnt,
-        v.view,
-        v.created_at,
-        v.updated_at,
-        u.id AS user_id,
-        u.email AS user_email,
-        u.name AS user_name,
-        f.id AS file_id,
-        f.name AS file_name,
-        f.path AS file_path,
-        f.extension AS file_extension,
-        f.full_path AS file_full_path
-        FROM myungsang_db.videos v
-        JOIN users u on v.user_id = u.id
-        LEFT JOIN files f on v.thumbnail_file_id = f.id
-        LEFT JOIN video_category vc on v.id = vc.video_id
-        LEFT JOIN categories c on vc.category_id = c.id
+        video.id,
+        video.title,
+        video.like_cnt,
+        video.view,
+        video.created_at,
+        video.updated_at,
+        user.id AS user_id,
+        user.email AS user_email,
+        user.name AS user_name,
+        file.id AS file_id,
+        file.name AS file_name,
+        file.path AS file_path,
+        file.extension AS file_extension,
+        file.full_path AS file_full_path
+        FROM myungsang_db.videos video
+        JOIN users user on video.user_id = user.id
+        LEFT JOIN files file on video.thumbnail_file_id = file.id
+        LEFT JOIN video_category vc on video.id = vc.video_id
+        LEFT JOIN categories category on vc.category_id = category.id
         <if test="category_id != 0">WHERE category_id = #{category_id}</if>
         <if test="page_count != -1">LIMIT #{page_count}</if>
         <if test="page_index != -1">OFFSET #{page_index}</if>
+        ORDER BY videos.show_id;
     </select>
 </mapper>
 
