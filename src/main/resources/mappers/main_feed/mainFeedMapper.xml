@@ -47,7 +47,8 @@
             <result property="id" column="user_id"/>
             <result property="email" column="user_email"/>
             <result property="name" column="user_name"/>
-            <association property="file" javaType="com.myungsang.myungsang_backend.file.vo.FileVO" notNullColumn="user_file_id">
+            <association property="file" javaType="com.myungsang.myungsang_backend.file.vo.FileVO"
+                         notNullColumn="user_file_id">
                 <result property="id" column="user_file_id"/>
                 <result property="name" column="user_file_name"/>
                 <result property="path" column="user_file_path"/>
@@ -71,6 +72,11 @@
             <result property="extension" column="video_file_extension"/>
             <result property="fullPath" column="video_file_full_path"/>
         </association>
+        <collection property="categories"
+                    ofType="com.myungsang.myungsang_backend.category.vo.CategoryVO">
+            <id property="id" column="category_id"/>
+            <result property="title" column="category_title"/>
+        </collection>
     </resultMap>
     <select id="getFeed" resultType="com.myungsang.myungsang_backend.main_feed.dto.MainFeedDTO" resultMap="feedVideo"
             parameterType="long">
@@ -100,6 +106,8 @@
         video_file.path AS video_file_path,
         video_file.extension AS video_file_extension,
         video_file.full_path AS video_file_full_path,
+        category.id AS category_id,
+        category.title AS category_title,
         exists(select * from like_tbl lt where lt.user_id = #{user_id} and lt.file_id = video.id ) AS liked
         FROM myungsang_db.videos video
         JOIN users user on video.user_id = user.id and user.deleted = false

@@ -1,9 +1,12 @@
 package com.myungsang.myungsang_backend.main_feed.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.myungsang.myungsang_backend.category.vo.CategoryVO;
 import com.myungsang.myungsang_backend.file.vo.FileVO;
 import com.myungsang.myungsang_backend.user.vo.UserVO;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class MainFeedDTO {
@@ -24,6 +27,9 @@ public class MainFeedDTO {
 
     @JsonProperty
     private FileVO video_file;
+
+    @JsonProperty
+    private List<CategoryVO> categories;
 
     @JsonProperty
     private int likeCnt;

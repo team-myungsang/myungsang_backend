@@ -42,6 +42,11 @@
             <result property="extension" column="video_file_extension"/>
             <result property="fullPath" column="video_file_full_path"/>
         </association>
+        <collection property="categories"
+                    ofType="com.myungsang.myungsang_backend.category.vo.CategoryVO">
+            <id property="id" column="category_id"/>
+            <result property="title" column="category_title"/>
+        </collection>
     </resultMap>
     <select id="getVideo" resultMap="videoMap">
         SELECT video.id,
@@ -69,6 +74,8 @@
                video_file.path          AS video_file_path,
                video_file.extension     AS video_file_extension,
                video_file.full_path     AS video_file_full_path,
+               category.id              AS category_id,
+               category.title           AS category_title,
                exists(
                        select *
                        from like_tbl lt
@@ -80,8 +87,11 @@
                  LEFT JOIN files thumbnail_file on video.thumbnail_file_id = thumbnail_file.id
                  LEFT JOIN files video_file on video.video_file_id = video_file.id
                  LEFT JOIN files user_file on user.file_id = user_file.id
+                 LEFT JOIN video_category vc on video.id = vc.video_id
+                 LEFT JOIN categories category on vc.category_id = category.id
         WHERE video.id = #{id}
     </select>
+
     <select id="getMyVideos" resultMap="videoMap">
         SELECT video.id,
                video.title,
@@ -108,6 +118,8 @@
                video_file.path          AS video_file_path,
                video_file.extension     AS video_file_extension,
                video_file.full_path     AS video_file_full_path,
+               category.id              AS category_id,
+               category.title           AS category_title,
                exists(
                        select *
                        from like_tbl lt
@@ -119,6 +131,8 @@
                  LEFT JOIN files thumbnail_file on video.thumbnail_file_id = thumbnail_file.id
                  LEFT JOIN files video_file on video.video_file_id = video_file.id
                  LEFT JOIN files user_file on user.file_id = user_file.id
+                 LEFT JOIN video_category vc on video.id = vc.video_id
+                 LEFT JOIN categories category on vc.category_id = category.id
         where video.user_id = #{user_id}
     </select>
     <insert id="saveVideo" parameterType="VideoVO">
