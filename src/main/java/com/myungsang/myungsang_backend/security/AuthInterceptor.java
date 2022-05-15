@@ -58,6 +58,10 @@ public class AuthInterceptor implements HandlerInterceptor {
             return true;
         }
 
+        if(Objects.equals(requestUri.split("/")[1], "main")) {
+            return true;
+        }
+
         Map<String, Object> map = new HashMap<>();
         Gson gson = new Gson();
         JsonObject jsonObject = new JsonObject();

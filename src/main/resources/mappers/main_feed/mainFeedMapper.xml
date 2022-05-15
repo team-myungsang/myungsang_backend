@@ -94,9 +94,10 @@
         LEFT JOIN video_category vc on video.id = vc.video_id
         LEFT JOIN categories category on vc.category_id = category.id
         <if test="category_id != 0">WHERE category_id = #{category_id}</if>
+        ORDER BY video.show_id
         <if test="page_count != -1">LIMIT #{page_count}</if>
         <if test="page_index != -1">OFFSET #{page_index}</if>
-        ORDER BY video.show_id;
+        ;
     </select>
 </mapper>
 
