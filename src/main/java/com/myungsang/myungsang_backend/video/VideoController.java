@@ -173,10 +173,19 @@ public class VideoController {
     }
 
     @PostMapping("/increaseLikeCnt")
-    public Map<String, Object> increaseLikeCnt(@RequestHeader("accessToken") String accessToken, @RequestBody VideoVO videoVO, HttpServletResponse response) {
+    public ResponseEntity<Map<String, Object>> increaseLikeCnt(@RequestHeader("accessToken") String accessToken, @RequestBody VideoVO videoVO, HttpServletResponse response) {
         int user_id = 0;
         if (accessToken != null) {
             String decodedToken = jwtService.decodeTokenByHeaderString(accessToken);
+            if (Objects.equals(decodedToken, "invalid")) {
+                Map<String, Object> resultMap = new HashMap<String, Object>();
+                resultMap.put("msg", "Token Invalid");
+                return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+            } else if (Objects.equals(decodedToken, "expire")) {
+                Map<String, Object> resultMap = new HashMap<String, Object>();
+                resultMap.put("msg", "Token Expired");
+                return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+            }
             user_id = Integer.parseInt(decodedToken);
         }
 
@@ -187,14 +196,23 @@ public class VideoController {
         interestFeedVO.setFileId(videoVO.getId());
         interestFeedIService.insertInterestFeed(interestFeedVO);
         videoIService.clickLikeButton(videoVO);
-        return resultMap;
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
     @PostMapping("/decreaseLikeCnt")
-    public Map<String, Object> decreaseLikeCnt(@RequestHeader("accessToken") String accessToken, @RequestBody VideoVO videoVO, HttpServletResponse response) {
+    public ResponseEntity<Map<String, Object>> decreaseLikeCnt(@RequestHeader("accessToken") String accessToken, @RequestBody VideoVO videoVO, HttpServletResponse response) {
         int user_id = 0;
         if (accessToken != null) {
             String decodedToken = jwtService.decodeTokenByHeaderString(accessToken);
+            if (Objects.equals(decodedToken, "invalid")) {
+                Map<String, Object> resultMap = new HashMap<String, Object>();
+                resultMap.put("msg", "Token Invalid");
+                return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+            } else if (Objects.equals(decodedToken, "expire")) {
+                Map<String, Object> resultMap = new HashMap<String, Object>();
+                resultMap.put("msg", "Token Expired");
+                return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+            }
             user_id = Integer.parseInt(decodedToken);
         }
 
@@ -205,6 +223,6 @@ public class VideoController {
         interestFeedVO.setFileId(videoVO.getId());
         interestFeedIService.deleteInterestFeed(interestFeedVO);
         videoIService.unclickLikeButton(videoVO);
-        return resultMap;
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 }
