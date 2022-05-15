@@ -13,7 +13,10 @@ public interface VideoIService {
 
     void saveVideo(VideoVO videoVO);
 
+    void updateVideo(VideoVO videoVO);
+
     void saveCategories(long videoId, List<CategoryVO> categoryVOList);
+    void deleteCategories(long videoId);
 
     void saveVideoFile(long id, long videoFileId);
 

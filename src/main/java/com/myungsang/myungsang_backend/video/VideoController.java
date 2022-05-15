@@ -1,6 +1,5 @@
 package com.myungsang.myungsang_backend.video;
 
-import com.myungsang.myungsang_backend.category.iservice.CategoryIService;
 import com.myungsang.myungsang_backend.category.vo.CategoryVO;
 import com.myungsang.myungsang_backend.file.iservice.FileIService;
 import com.myungsang.myungsang_backend.file.vo.FileVO;
@@ -8,7 +7,6 @@ import com.myungsang.myungsang_backend.interest_feed.iservice.InterestFeedIServi
 import com.myungsang.myungsang_backend.interest_feed.vo.InterestFeedVO;
 import com.myungsang.myungsang_backend.security.JwtService;
 import com.myungsang.myungsang_backend.service.S3Uploader;
-import com.myungsang.myungsang_backend.user.vo.UserVO;
 import com.myungsang.myungsang_backend.video.dto.VideoDTO;
 import com.myungsang.myungsang_backend.video.iservice.VideoIService;
 import com.myungsang.myungsang_backend.video.vo.VideoVO;
@@ -72,24 +70,51 @@ public class VideoController {
 
     @PostMapping("/videos")
     public ResponseEntity<Map<String, Object>> saveVideo(@RequestHeader("accessToken") String accessToken, @RequestBody VideoDTO videoDTO) {
-        String user = jwtService.decodeTokenByHeaderString(accessToken);
-        if (Objects.equals(user, "invalid")) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("message", "invalid token");
-            return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
-        } else if (Objects.equals(user, "expire")) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("message", "token expire");
-            return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
+        int user_id = 0;
+        if (accessToken != null) {
+            String decodedToken = jwtService.decodeTokenByHeaderString(accessToken);
+            user_id = Integer.parseInt(decodedToken);
+        }
+
+        if (videoDTO.getContent() == null) {
+            videoDTO.setContent("");
         }
 
         VideoVO videoVO = new VideoVO();
-        videoVO.setUserId(Integer.parseInt(user));
+        videoVO.setUserId(user_id);
         videoVO.setTitle(videoDTO.getTitle());
         videoVO.setContent(videoDTO.getContent());
         videoIService.saveVideo(videoVO);
 
         List<CategoryVO> categoryVOList = videoDTO.getCategories();
+        if (categoryVOList != null) {
+            videoIService.saveCategories(videoVO.getId(), categoryVOList);
+        }
+
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("id", videoVO.getId());
+
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
+    }
+
+    @PatchMapping("/videos/{id}")
+    public ResponseEntity<Map<String, Object>> updateVideo(@RequestHeader("accessToken") String accessToken, @PathVariable long id, @RequestBody VideoDTO videoDTO) {
+        int user_id = 0;
+        if (accessToken != null) {
+            String decodedToken = jwtService.decodeTokenByHeaderString(accessToken);
+            user_id = Integer.parseInt(decodedToken);
+        }
+
+        VideoVO videoVO = new VideoVO();
+        videoVO.setUserId(user_id);
+        videoVO.setId(id);
+        videoVO.setTitle(videoDTO.getTitle());
+        videoVO.setContent(videoDTO.getContent());
+        videoIService.updateVideo(videoVO);
+
+        List<CategoryVO> categoryVOList = videoDTO.getCategories();
+        videoIService.deleteCategories(id);
+
         if (categoryVOList != null) {
             videoIService.saveCategories(videoVO.getId(), categoryVOList);
         }
