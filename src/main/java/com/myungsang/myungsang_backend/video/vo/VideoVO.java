@@ -13,6 +13,7 @@ public class VideoVO {
     private String createdAt;
     private String updatedAt;
     private String content;
+    private int showId;
 
     public long getId() {
         return id;
@@ -108,5 +109,13 @@ public class VideoVO {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public int getShowId() {
+        return showId;
+    }
+
+    public void setShowId(int showId) {
+        this.showId = showId;
     }
 }

@@ -29,6 +29,12 @@ public class VideoService implements VideoIService {
 
     @Override
     public void saveVideo(VideoVO videoVO) {
+        Integer maxShowId = videoIMapper.getMaxShowId();
+        if(maxShowId == null) {
+            videoVO.setShowId(1);
+        } else {
+            videoVO.setShowId(maxShowId + 1);
+        }
         videoIMapper.saveVideo(videoVO);
     }
 

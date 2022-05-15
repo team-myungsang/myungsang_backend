@@ -15,6 +15,8 @@ public interface VideoIMapper {
 
     void saveVideo(VideoVO videoVO);
 
+    Integer getMaxShowId();
+
     void saveCategories(@Param("video_id") long videoId, @Param("category_id") long categoryId);
 
     void saveVideoFile(@Param("id") long id, @Param("video_file_id") long videoFileId);
