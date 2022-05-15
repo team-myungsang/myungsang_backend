@@ -7,6 +7,7 @@ import com.myungsang.myungsang_backend.interest_feed.vo.InterestFeedVO;
 import com.myungsang.myungsang_backend.security.JwtService;
 import com.myungsang.myungsang_backend.service.S3Uploader;
 import com.myungsang.myungsang_backend.user.vo.UserVO;
+import com.myungsang.myungsang_backend.video.dto.VideoDTO;
 import com.myungsang.myungsang_backend.video.iservice.VideoIService;
 import com.myungsang.myungsang_backend.video.vo.VideoVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,13 +46,12 @@ public class VideoController {
     }
 
     @GetMapping("videos/{id}")
-    public VideoVO getVideo(@PathVariable long id) {
+    public VideoDTO getVideo(@PathVariable long id) {
         return videoIService.getVideo(id);
     }
 
     @PostMapping("/videos")
     public ResponseEntity<Map<String, Object>> saveVideo(@RequestHeader("Authorization") String authorization, @RequestBody VideoVO videoVO) {
-        System.out.println("authorization = " + authorization);
         String user = jwtService.decodeTokenByHeaderString(authorization);
         if (Objects.equals(user, "invalid")) {
             Map<String, Object> map = new HashMap<String, Object>();

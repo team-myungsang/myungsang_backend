@@ -47,12 +47,20 @@
             <result property="name" column="user_name"/>
         </association>
         <association property="thumbnail_file" javaType="com.myungsang.myungsang_backend.file.vo.FileVO"
-                     notNullColumn="file_id">
-            <result property="id" column="file_id"/>
-            <result property="name" column="file_name"/>
-            <result property="path" column="file_path"/>
-            <result property="extension" column="file_extension"/>
-            <result property="fullPath" column="file_full_path"/>
+                     notNullColumn="thumbnail_file_id">
+            <result property="id" column="thumbnail_file_id"/>
+            <result property="name" column="thumbnail_file_name"/>
+            <result property="path" column="thumbnail_file_path"/>
+            <result property="extension" column="thumbnail_file_extension"/>
+            <result property="fullPath" column="thumbnail_file_full_path"/>
+        </association>
+        <association property="video_file" javaType="com.myungsang.myungsang_backend.file.vo.FileVO"
+                     notNullColumn="video_file_id">
+            <result property="id" column="video_file_id"/>
+            <result property="name" column="video_file_name"/>
+            <result property="path" column="video_file_path"/>
+            <result property="extension" column="video_file_extension"/>
+            <result property="fullPath" column="video_file_full_path"/>
         </association>
     </resultMap>
     <select id="getFeed" resultType="com.myungsang.myungsang_backend.main_feed.dto.MainFeedDTO" resultMap="feedVideo"
@@ -67,14 +75,20 @@
         user.id AS user_id,
         user.email AS user_email,
         user.name AS user_name,
-        file.id AS file_id,
-        file.name AS file_name,
-        file.path AS file_path,
-        file.extension AS file_extension,
-        file.full_path AS file_full_path
+        thumbnail_file.id AS thumbnail_file_id,
+        thumbnail_file.name AS thumbnail_file_name,
+        thumbnail_file.path AS thumbnail_file_path,
+        thumbnail_file.extension AS thumbnail_file_extension,
+        thumbnail_file.full_path AS thumbnail_file_full_path,
+        video_file.id AS video_file_id,
+        video_file.name AS video_file_name,
+        video_file.path AS video_file_path,
+        video_file.extension AS video_file_extension,
+        video_file.full_path AS video_file_full_path
         FROM myungsang_db.videos video
         JOIN users user on video.user_id = user.id
-        LEFT JOIN files file on video.thumbnail_file_id = file.id
+        LEFT JOIN files thumbnail_file on video.thumbnail_file_id = thumbnail_file.id
+        LEFT JOIN files video_file on video.video_file_id = video_file.id
         LEFT JOIN video_category vc on video.id = vc.video_id
         LEFT JOIN categories category on vc.category_id = category.id
         <if test="category_id != 0">WHERE category_id = #{category_id}</if>

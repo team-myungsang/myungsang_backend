@@ -1,6 +1,7 @@
 package com.myungsang.myungsang_backend.video.service;
 
 import com.myungsang.myungsang_backend.user.iservice.UserIService;
+import com.myungsang.myungsang_backend.video.dto.VideoDTO;
 import com.myungsang.myungsang_backend.video.iservice.VideoIService;
 import com.myungsang.myungsang_backend.video.repository.VideoIMapper;
 import com.myungsang.myungsang_backend.video.vo.VideoVO;
@@ -14,7 +15,7 @@ public class VideoService implements VideoIService {
     private VideoIMapper videoIMapper;
 
     @Override
-    public VideoVO getVideo(long id) {
+    public VideoDTO getVideo(long id) {
         return videoIMapper.getVideo(id);
     }
 

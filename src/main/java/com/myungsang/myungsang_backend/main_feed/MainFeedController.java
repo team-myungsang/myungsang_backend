@@ -21,15 +21,13 @@ public class MainFeedController {
 
     @GetMapping("/main/videos")
     public List<MainFeedDTO> getFeed(
+            @RequestHeader(value = "accessToken") String accessToken,
             @RequestParam(value = "view", required = false) String view,
             @RequestParam(value = "category_id", defaultValue = "0") int category_id,
             @RequestParam(value = "page_index", defaultValue = "-1") int page_index,
             @RequestParam(value = "page_count", defaultValue = "-1") int page_count
     ) {
-        System.out.println("view = " + view);
-        System.out.println("category_id = " + category_id);
-        System.out.println("page_index = " + page_index);
-        System.out.println("page_count = " + page_count);
+        System.out.println("accessToken = " + accessToken);
         return mainFeedIService.getFeed(view, category_id, page_index, page_count);
     }
 }
