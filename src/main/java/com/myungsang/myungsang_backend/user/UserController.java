@@ -60,6 +60,15 @@ public class UserController {
         return userIService.getUser(id);
     }
 
+    @GetMapping("users/me")
+    public UserVO getMe(@RequestHeader("accessToken") String accessToken) {
+        long userId = 0;
+        String decodedToken = jwtService.decodeTokenByHeaderString(accessToken);
+        userId = Integer.parseInt(decodedToken);
+
+        return userIService.getUser(userId);
+    }
+
     @PostMapping("checkEmail")
     public Map<String, Object> checkEmail(@RequestBody UserVO userVO) {
         String msg = userIService.checkEmail(userVO.getEmail());
@@ -104,7 +113,7 @@ public class UserController {
     @PostMapping("users/{id}/profile_image")
     @ResponseBody
     public String uploadProfileImage(@PathVariable long id, @RequestParam("profile_image") MultipartFile userProfileImage) throws IOException {
-        String filePath = "uploads/users/" + id + "/profile_images" ;
+        String filePath = "uploads/users/" + id + "/profile_images";
         FileVO file = s3Uploader.upload(userProfileImage, filePath);
         fileIService.saveFile(file);
 
@@ -120,11 +129,11 @@ public class UserController {
         Map<String, Object> resultMap = new HashMap<String, Object>();
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        if(resultUser == null) {
+        if (resultUser == null) {
             Map<String, Object> map = new HashMap<>();
             map.put("message", "Wrong email");
             return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
-        } else if(!encoder.matches(userVO.getPassword(), resultUser.getPassword())) {
+        } else if (!encoder.matches(userVO.getPassword(), resultUser.getPassword())) {
             Map<String, Object> map = new HashMap<>();
             map.put("message", "Wrong password");
             return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
@@ -174,6 +183,7 @@ public class UserController {
         resultMap.put("result", result);
         return resultMap;
     }
+
     @PostMapping("/validRefreshToken")
     public Map<String, Object> validRefreshToken(@RequestBody UserVO userVO, HttpServletResponse response) {
         Map<String, Object> resultMap = jwtService.validRefreshToken(userVO);
