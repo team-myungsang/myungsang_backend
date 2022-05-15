@@ -122,7 +122,8 @@
     <delete id="deleteUser">
         UPDATE myungsang_db.users
         SET deleted = true,
-            name    = concat('deleted_user_', current_timestamp)
+            name    = concat('deleted_user_', #{id}, '_', unix_timestamp()),
+            email   = concat(#{id}, '_', unix_timestamp(), '@deleted.com')
         WHERE id = #{id}
     </delete>
 </mapper>
