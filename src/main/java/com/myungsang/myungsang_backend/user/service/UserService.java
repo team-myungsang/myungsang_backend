@@ -99,4 +99,9 @@ public class UserService implements UserIService {
     public UserVO getUserByRefreshToken(UserVO userVO) {
         return userIMapper.getUserByRefreshToken(userVO);
     }
+
+    @Override
+    public void deleteUser(long id) {
+        userIMapper.deleteUser(id);
+    }
 }

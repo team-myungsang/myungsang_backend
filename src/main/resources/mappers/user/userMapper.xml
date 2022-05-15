@@ -39,7 +39,9 @@
                files.extension     AS file_extension,
                files.full_path     AS file_full_path
         FROM myungsang_db.users as users
-                 LEFT JOIN files as files on files.id = users.file_id LIMIT 20;
+                 LEFT JOIN files as files on files.id = users.file_id
+        WHERE users.deleted = false
+        LIMIT 20;
 
     </select>
     <select id="getUser" resultMap="userMap">
@@ -55,15 +57,20 @@
                files.full_path AS file_full_path
         FROM myungsang_db.users as users
                  LEFT JOIN files as files on files.id = users.file_id
-        WHERE users.id = #{id};
+        WHERE users.id = #{id}
+          AND deleted = false;
     </select>
     <select id="checkEmail" resultMap="userMap">
-        SELECT * FROM myungsang_db.users
+        SELECT *
+        FROM myungsang_db.users
         WHERE email = #{email}
+          AND deleted = false
     </select>
     <select id="checkName" resultMap="userMap">
-        SELECT * FROM myungsang_db.users
+        SELECT *
+        FROM myungsang_db.users
         WHERE name = #{name}
+          AND deleted = false
     </select>
     <update id="updateName" parameterType="com.myungsang.myungsang_backend.user.vo.UserVO">
         UPDATE myungsang_db.users
@@ -86,26 +93,36 @@
             <if test="item.name != null">name=#{item.name},</if>
             <if test="item.password != null">password=#{item.password},</if>
         </trim>
-        WHERE id=#{id}
+        WHERE id=#{id} AND deleted = false
     </update>
     <update id="updateUserFile" parameterType="long">
         UPDATE myungsang_db.users
         SET file_id=#{file_id}
         WHERE id = #{id}
+          AND deleted = false
     </update>
     <update id="saveRefreshToken" parameterType="com.myungsang.myungsang_backend.user.vo.UserVO">
         UPDATE myungsang_db.users
         SET refresh_token = #{refreshToken}
         WHERE id = #{id}
+          AND deleted = false
     </update>
     <select id="getUserByLogin" resultMap="userMap">
         SELECT *
         FROM myungsang_db.users
-        WHERE email = #{email};
+        WHERE email = #{email}
+          AND deleted = false;
     </select>
     <select id="getUserByRefreshToken" resultMap="userMap">
         SELECT *
         FROM myungsang_db.users
-        WHERE refresh_token = #{refreshToken};
+        WHERE refresh_token = #{refreshToken}
+          AND deleted = false;
     </select>
+    <delete id="deleteUser">
+        UPDATE myungsang_db.users
+        SET deleted = true,
+            name    = concat('deleted_user_', current_timestamp)
+        WHERE id = #{id}
+    </delete>
 </mapper>

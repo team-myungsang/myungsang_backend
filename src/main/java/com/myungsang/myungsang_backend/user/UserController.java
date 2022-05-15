@@ -193,4 +193,17 @@ public class UserController {
         Map<String, Object> resultMap = jwtService.validRefreshToken(userVO);
         return resultMap;
     }
+
+    @DeleteMapping("/users")
+    public ResponseEntity<Map<String, Object>> deleteUser(@RequestHeader("accessToken") String accessToken) {
+        long userId = 0;
+        String decodedToken = jwtService.decodeTokenByHeaderString(accessToken);
+        userId = Integer.parseInt(decodedToken);
+
+        userIService.deleteUser(userId);
+
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("msg", "success");
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
+    }
 }
