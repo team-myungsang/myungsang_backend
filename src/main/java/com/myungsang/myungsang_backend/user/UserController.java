@@ -110,16 +110,23 @@ public class UserController {
         return null;
     }
 
-    @PostMapping("users/{id}/profile_image")
+    @PostMapping("users/profile_image")
     @ResponseBody
-    public String uploadProfileImage(@PathVariable long id, @RequestParam("profile_image") MultipartFile userProfileImage) throws IOException {
-        String filePath = "uploads/users/" + id + "/profile_images";
+    public Map<String, Object> uploadProfileImage(@RequestHeader("accessToken") String accessToken, @RequestParam("profile_image") MultipartFile userProfileImage) throws IOException {
+        long userId = 0;
+        String decodedToken = jwtService.decodeTokenByHeaderString(accessToken);
+        userId = Integer.parseInt(decodedToken);
+
+        String filePath = "uploads/users/" + userId + "/profile_images";
         FileVO file = s3Uploader.upload(userProfileImage, filePath);
         fileIService.saveFile(file);
 
-        userIService.updateUserFile(file.getId(), id);
+        userIService.updateUserFile(file.getId(), userId);
 
-        return null;
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("msg", "success");
+
+        return resultMap;
     }
 
     @PostMapping("/login")
