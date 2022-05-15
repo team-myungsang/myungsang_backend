@@ -11,9 +11,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
@@ -50,8 +48,17 @@ public class AuthInterceptor implements HandlerInterceptor {
                 || requestUri.equals("/logout")
                 || requestUri.equals("/register")
                 || requestUri.equals("/main/videos")
+                || requestUri.equals("/categories")
                 || requestUri.equals("/validRefreshToken")
             ) {
+            return true;
+        }
+
+        if(Objects.equals(requestUri.split("/")[1], "videos")) {
+            return true;
+        }
+
+        if(Objects.equals(requestUri.split("/")[1], "main")) {
             return true;
         }
 

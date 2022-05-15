@@ -13,7 +13,8 @@ public interface MainFeedIMapper {
             @Param("view") String view,
             @Param("category_id") int category_id,
             @Param("page_index") int page_index,
-            @Param("page_count") int page_count
+            @Param("page_count") int page_count,
+            @Param("user_id") int user_id
     );
 
     List<MainFeedVO> mainVideos();
