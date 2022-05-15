@@ -127,6 +127,14 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
     </insert>
+    <update id="updateVideo" parameterType="com.myungsang.myungsang_backend.video.vo.VideoVO">
+        UPDATE myungsang_db.videos
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null">title=#{title},</if>
+            <if test="content != null">content=#{content},</if>
+        </trim>
+        WHERE id=#{id} and user_id=#{userId}
+    </update>
     <update id="saveVideoFile" parameterType="long">
         UPDATE myungsang_db.videos
         SET video_file_id=#{video_file_id}

@@ -5,4 +5,9 @@
     <insert id="saveCategories" parameterType="VideoVO">
         INSERT INTO myungsang_db.video_category(video_id, category_id) values (#{video_id}, #{category_id})
     </insert>
+    <insert id="deleteCategories" parameterType="long">
+        DELETE
+        FROM myungsang_db.video_category
+        WHERE video_id = #{id};
+    </insert>
 </mapper>
