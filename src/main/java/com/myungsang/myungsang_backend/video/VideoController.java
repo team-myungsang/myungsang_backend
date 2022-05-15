@@ -46,9 +46,12 @@ public class VideoController {
     }
 
     @GetMapping("videos/{id}")
-    public VideoDTO getVideo(@RequestHeader(value = "accessToken") String accessToken, @PathVariable long id) {
-        String decodedToken = jwtService.decodeTokenByHeaderString(accessToken);
-        int user_id = Integer.parseInt(decodedToken);
+    public VideoDTO getVideo(@RequestHeader(value = "accessToken", required = false) String accessToken, @PathVariable long id) {
+        int user_id = 0;
+        if (accessToken != null) {
+            String decodedToken = jwtService.decodeTokenByHeaderString(accessToken);
+            user_id = Integer.parseInt(decodedToken);
+        }
 
         return videoIService.getVideo(id, user_id);
     }
