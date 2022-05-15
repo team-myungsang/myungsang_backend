@@ -21,10 +21,10 @@ public class JwtService {
     private UserIService userIService;
 
     @Value("${security.expire.accesstoken}")
-    private Long ACCESS_TOKEN_EXP_TIME;     //            // 20분 기준
+    private Long ACCESS_TOKEN_EXP_TIME;
 
     @Value("${security.expire.refreshtoken}")
-    private Long REFRESH_TOKEN_EXP_TIME;     //           // 7일 기준
+    private Long REFRESH_TOKEN_EXP_TIME;
 
     @Value("${security.secretkey}")
     private String SECRET_KEY;   // 암/복호 키
