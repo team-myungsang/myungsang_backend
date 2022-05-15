@@ -59,6 +59,17 @@ public class VideoController {
         return videoIService.getVideo(id, user_id);
     }
 
+    @GetMapping("videos/me")
+    public List<VideoDTO> getMyVideos(@RequestHeader(value = "accessToken") String accessToken) {
+        int user_id = 0;
+        if (accessToken != null) {
+            String decodedToken = jwtService.decodeTokenByHeaderString(accessToken);
+            user_id = Integer.parseInt(decodedToken);
+        }
+
+        return videoIService.getMyVideos(user_id);
+    }
+
     @PostMapping("/videos")
     public ResponseEntity<Map<String, Object>> saveVideo(@RequestHeader("accessToken") String accessToken, @RequestBody VideoDTO videoDTO) {
         String user = jwtService.decodeTokenByHeaderString(accessToken);

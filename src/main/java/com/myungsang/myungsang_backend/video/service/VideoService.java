@@ -23,6 +23,11 @@ public class VideoService implements VideoIService {
     }
 
     @Override
+    public List<VideoDTO> getMyVideos(long user_id) {
+        return videoIMapper.getMyVideos(user_id);
+    }
+
+    @Override
     public void saveVideo(VideoVO videoVO) {
         videoIMapper.saveVideo(videoVO);
     }
