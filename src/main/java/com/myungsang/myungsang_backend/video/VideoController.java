@@ -1,5 +1,7 @@
 package com.myungsang.myungsang_backend.video;
 
+import com.myungsang.myungsang_backend.category.iservice.CategoryIService;
+import com.myungsang.myungsang_backend.category.vo.CategoryVO;
 import com.myungsang.myungsang_backend.file.iservice.FileIService;
 import com.myungsang.myungsang_backend.file.vo.FileVO;
 import com.myungsang.myungsang_backend.interest_feed.iservice.InterestFeedIService;
@@ -19,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -57,8 +60,8 @@ public class VideoController {
     }
 
     @PostMapping("/videos")
-    public ResponseEntity<Map<String, Object>> saveVideo(@RequestHeader("Authorization") String authorization, @RequestBody VideoVO videoVO) {
-        String user = jwtService.decodeTokenByHeaderString(authorization);
+    public ResponseEntity<Map<String, Object>> saveVideo(@RequestHeader("accessToken") String accessToken, @RequestBody VideoDTO videoDTO) {
+        String user = jwtService.decodeTokenByHeaderString(accessToken);
         if (Objects.equals(user, "invalid")) {
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("message", "invalid token");
@@ -68,11 +71,20 @@ public class VideoController {
             map.put("message", "token expire");
             return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
         }
+
+        VideoVO videoVO = new VideoVO();
         videoVO.setUserId(Integer.parseInt(user));
+        videoVO.setTitle(videoDTO.getTitle());
+        videoVO.setContent(videoDTO.getContent());
         videoIService.saveVideo(videoVO);
+        
+        List<CategoryVO> categoryVOList = videoDTO.getCategories();
+        if (categoryVOList != null) {
+            videoIService.saveCategories(videoVO.getId(), categoryVOList);
+        }
+
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put("id", videoVO.getId());
-
 
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
@@ -103,12 +115,17 @@ public class VideoController {
     }
 
     @PostMapping("/increaseLikeCnt")
-    public Map<String, Object> increaseLikeCnt(@RequestBody VideoVO videoVO, HttpServletResponse response) {
+    public Map<String, Object> increaseLikeCnt(@RequestHeader("accessToken") String accessToken, @RequestBody VideoVO videoVO, HttpServletResponse response) {
+        int user_id = 0;
+        if (accessToken != null) {
+            String decodedToken = jwtService.decodeTokenByHeaderString(accessToken);
+            user_id = Integer.parseInt(decodedToken);
+        }
 
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put("msg", "LikeCount is increased");
         InterestFeedVO interestFeedVO = new InterestFeedVO();
-        interestFeedVO.setUserId(videoVO.getUserId());
+        interestFeedVO.setUserId(user_id);
         interestFeedVO.setFileId(videoVO.getId());
         interestFeedIService.insertInterestFeed(interestFeedVO);
         videoIService.clickLikeButton(videoVO);
@@ -117,7 +134,6 @@ public class VideoController {
 
     @PostMapping("/decreaseLikeCnt")
     public Map<String, Object> decreaseLikeCnt(@RequestBody VideoVO videoVO, HttpServletResponse response) {
-
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put("msg", "LikeCount is decreased");
         InterestFeedVO interestFeedVO = new InterestFeedVO();
