@@ -121,8 +121,11 @@
                  LEFT JOIN files user_file on user.file_id = user_file.id
         where video.user_id = #{user_id}
     </select>
+    <select id="getMaxShowId" resultType="Integer">
+        SELECT MAX(show_id) FROM myungsang_db.videos
+    </select>
     <insert id="saveVideo" parameterType="VideoVO">
-        INSERT INTO myungsang_db.videos(user_id, title, content) values (#{userId}, #{title}, #{content})
+        INSERT INTO myungsang_db.videos(user_id, title, content, show_id) values (#{userId}, #{title}, #{content}, #{showId})
         <selectKey resultType="long" keyProperty="id" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
