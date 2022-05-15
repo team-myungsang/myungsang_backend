@@ -48,6 +48,7 @@ public class AuthInterceptor implements HandlerInterceptor {
                 || requestUri.equals("/logout")
                 || requestUri.equals("/register")
                 || requestUri.equals("/main/videos")
+                || requestUri.equals("/categories")
                 || requestUri.equals("/validRefreshToken")
             ) {
             return true;
