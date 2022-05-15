@@ -4,10 +4,15 @@ import com.myungsang.myungsang_backend.file.iservice.FileIService;
 import com.myungsang.myungsang_backend.file.vo.FileVO;
 import com.myungsang.myungsang_backend.interest_feed.iservice.InterestFeedIService;
 import com.myungsang.myungsang_backend.interest_feed.vo.InterestFeedVO;
+import com.myungsang.myungsang_backend.security.JwtService;
 import com.myungsang.myungsang_backend.service.S3Uploader;
+import com.myungsang.myungsang_backend.user.vo.UserVO;
+import com.myungsang.myungsang_backend.video.dto.VideoDTO;
 import com.myungsang.myungsang_backend.video.iservice.VideoIService;
 import com.myungsang.myungsang_backend.video.vo.VideoVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000", "https://myungsang-frontend.vercel.app"}, allowCredentials = "true")
@@ -29,6 +35,9 @@ public class VideoController {
     @Autowired
     private InterestFeedIService interestFeedIService;
 
+    @Autowired
+    private JwtService jwtService;
+
     private final S3Uploader s3Uploader;
 
     @Autowired
@@ -37,8 +46,35 @@ public class VideoController {
     }
 
     @GetMapping("videos/{id}")
-    public VideoVO getVideo(@PathVariable long id) {
-        return videoIService.getVideo(id);
+    public VideoDTO getVideo(@RequestHeader(value = "accessToken", required = false) String accessToken, @PathVariable long id) {
+        int user_id = 0;
+        if (accessToken != null) {
+            String decodedToken = jwtService.decodeTokenByHeaderString(accessToken);
+            user_id = Integer.parseInt(decodedToken);
+        }
+
+        return videoIService.getVideo(id, user_id);
+    }
+
+    @PostMapping("/videos")
+    public ResponseEntity<Map<String, Object>> saveVideo(@RequestHeader("Authorization") String authorization, @RequestBody VideoVO videoVO) {
+        String user = jwtService.decodeTokenByHeaderString(authorization);
+        if (Objects.equals(user, "invalid")) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("message", "invalid token");
+            return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
+        } else if (Objects.equals(user, "expire")) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("message", "token expire");
+            return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
+        }
+        videoVO.setUserId(Integer.parseInt(user));
+        videoIService.saveVideo(videoVO);
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("id", videoVO.getId());
+
+
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
     @PostMapping("/videos/{id}/upload_file")

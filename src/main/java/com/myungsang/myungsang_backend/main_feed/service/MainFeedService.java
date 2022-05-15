@@ -18,8 +18,8 @@ public class MainFeedService implements MainFeedIService {
     }
 
     @Override
-    public List<MainFeedDTO> getFeed(String view, int category_id, int page_index, int page_count) {
-        return mainFeedIMapper.getFeed(view, category_id, page_index, page_count);
+    public List<MainFeedDTO> getFeed(String view, int category_id, int page_index, int page_count, int user_id) {
+        return mainFeedIMapper.getFeed(view, category_id, page_index, page_count, user_id);
     }
 
     @Override
