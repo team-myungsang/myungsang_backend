@@ -112,7 +112,7 @@ public class UserController {
 
     @PostMapping("users/profile_image")
     @ResponseBody
-    public Map<String, Object> uploadProfileImage(@RequestHeader("accessToken") String accessToken, @RequestParam("profile_image") MultipartFile userProfileImage) throws IOException {
+    public FileVO uploadProfileImage(@RequestHeader("accessToken") String accessToken, @RequestParam("profile_image") MultipartFile userProfileImage) throws IOException {
         long userId = 0;
         String decodedToken = jwtService.decodeTokenByHeaderString(accessToken);
         userId = Integer.parseInt(decodedToken);
@@ -123,10 +123,7 @@ public class UserController {
 
         userIService.updateUserFile(file.getId(), userId);
 
-        Map<String, Object> resultMap = new HashMap<String, Object>();
-        resultMap.put("msg", "success");
-
-        return resultMap;
+        return file;
     }
 
     @PostMapping("/login")

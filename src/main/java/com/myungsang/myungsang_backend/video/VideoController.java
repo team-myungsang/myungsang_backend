@@ -77,7 +77,7 @@ public class VideoController {
         videoVO.setTitle(videoDTO.getTitle());
         videoVO.setContent(videoDTO.getContent());
         videoIService.saveVideo(videoVO);
-        
+
         List<CategoryVO> categoryVOList = videoDTO.getCategories();
         if (categoryVOList != null) {
             videoIService.saveCategories(videoVO.getId(), categoryVOList);
@@ -133,11 +133,17 @@ public class VideoController {
     }
 
     @PostMapping("/decreaseLikeCnt")
-    public Map<String, Object> decreaseLikeCnt(@RequestBody VideoVO videoVO, HttpServletResponse response) {
+    public Map<String, Object> decreaseLikeCnt(@RequestHeader("accessToken") String accessToken, @RequestBody VideoVO videoVO, HttpServletResponse response) {
+        int user_id = 0;
+        if (accessToken != null) {
+            String decodedToken = jwtService.decodeTokenByHeaderString(accessToken);
+            user_id = Integer.parseInt(decodedToken);
+        }
+
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put("msg", "LikeCount is decreased");
         InterestFeedVO interestFeedVO = new InterestFeedVO();
-        interestFeedVO.setUserId(videoVO.getUserId());
+        interestFeedVO.setUserId(user_id);
         interestFeedVO.setFileId(videoVO.getId());
         interestFeedIService.deleteInterestFeed(interestFeedVO);
         videoIService.unclickLikeButton(videoVO);
