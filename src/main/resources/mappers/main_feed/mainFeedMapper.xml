@@ -80,7 +80,7 @@
         <if test="category_id != 0">WHERE category_id = #{category_id}</if>
         <if test="page_count != -1">LIMIT #{page_count}</if>
         <if test="page_index != -1">OFFSET #{page_index}</if>
-        ORDER BY videos.show_id;
+        ORDER BY video.show_id;
     </select>
 </mapper>
 
