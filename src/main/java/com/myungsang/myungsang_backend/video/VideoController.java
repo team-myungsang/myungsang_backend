@@ -59,6 +59,17 @@ public class VideoController {
         return videoIService.getVideo(id, user_id);
     }
 
+    @GetMapping("videos/me")
+    public List<VideoDTO> getMyVideos(@RequestHeader(value = "accessToken") String accessToken) {
+        int user_id = 0;
+        if (accessToken != null) {
+            String decodedToken = jwtService.decodeTokenByHeaderString(accessToken);
+            user_id = Integer.parseInt(decodedToken);
+        }
+
+        return videoIService.getMyVideos(user_id);
+    }
+
     @PostMapping("/videos")
     public ResponseEntity<Map<String, Object>> saveVideo(@RequestHeader("accessToken") String accessToken, @RequestBody VideoDTO videoDTO) {
         String user = jwtService.decodeTokenByHeaderString(accessToken);
@@ -86,6 +97,28 @@ public class VideoController {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put("id", videoVO.getId());
 
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/videos/{id}")
+    public ResponseEntity<Map<String, Object>> deleteVideo(@RequestHeader("accessToken") String accessToken, @PathVariable long id) {
+        int user_id = 0;
+        if (accessToken != null) {
+            String decodedToken = jwtService.decodeTokenByHeaderString(accessToken);
+            user_id = Integer.parseInt(decodedToken);
+        }
+
+        VideoDTO video = videoIService.getVideo(id, user_id);
+        if (video == null) {
+            Map<String, Object> resultMap = new HashMap<String, Object>();
+            resultMap.put("msg", "Not Found");
+            return new ResponseEntity<>(resultMap, HttpStatus.NOT_FOUND);
+        }
+
+        videoIService.deleteVideo(id);
+
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("msg", "success");
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
