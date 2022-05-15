@@ -20,7 +20,7 @@ public class TestController {
     }
     @GetMapping("/")
     public String hello() {
-        return System.getProperty("user.dir");
+        return "Hello Myungsang!";
     }
 
 }

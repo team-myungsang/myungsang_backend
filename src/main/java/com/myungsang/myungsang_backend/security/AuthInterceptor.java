@@ -35,7 +35,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         String requestUri = request.getRequestURI();
 
         if(requestUri.equals("/login")
-                || requestUri.equals("/error")
+                || requestUri.equals("/")
                 || requestUri.equals("/logout")
                 || requestUri.equals("/register")
                 || requestUri.equals("/main/videos")
