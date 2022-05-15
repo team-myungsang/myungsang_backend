@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface VideoIMapper {
-    VideoDTO getVideo(long id);
+    VideoDTO getVideo(@Param("id") long id, @Param("user_id") long user_id);
     void saveVideo(VideoVO videoVO);
     void saveVideoFile(@Param("id") long id, @Param("video_file_id") long videoFileId);
     void saveThumbnailFile(@Param("id") long id, @Param("thumbnail_file_id") long thumbnailFileId);

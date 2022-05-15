@@ -32,6 +32,9 @@ public class VideoDTO {
     private long path;
 
     @JsonProperty
+    private boolean liked;
+
+    @JsonProperty
     private String created_at;
 
     @JsonProperty

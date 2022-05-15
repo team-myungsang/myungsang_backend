@@ -41,6 +41,7 @@
         <id property="created_at" column="created_at"/>
         <id property="updated_at" column="updated_at"/>
         <id property="showId" column="show_id"/>
+        <id property="liked" column="liked"/>
         <association property="user" javaType="com.myungsang.myungsang_backend.user.vo.UserVO">
             <result property="id" column="user_id"/>
             <result property="email" column="user_email"/>
@@ -84,7 +85,8 @@
         video_file.name AS video_file_name,
         video_file.path AS video_file_path,
         video_file.extension AS video_file_extension,
-        video_file.full_path AS video_file_full_path
+        video_file.full_path AS video_file_full_path,
+        exists(select * from like_tbl lt where lt.user_id = #{user_id} and lt.file_id = video.id ) AS liked
         FROM myungsang_db.videos video
         JOIN users user on video.user_id = user.id
         LEFT JOIN files thumbnail_file on video.thumbnail_file_id = thumbnail_file.id

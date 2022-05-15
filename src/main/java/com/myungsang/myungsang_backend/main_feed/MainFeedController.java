@@ -5,6 +5,7 @@ import com.myungsang.myungsang_backend.file.vo.FileVO;
 import com.myungsang.myungsang_backend.main_feed.dto.MainFeedDTO;
 import com.myungsang.myungsang_backend.main_feed.iservice.MainFeedIService;
 import com.myungsang.myungsang_backend.main_feed.vo.MainFeedVO;
+import com.myungsang.myungsang_backend.security.JwtService;
 import com.myungsang.myungsang_backend.user.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,9 @@ public class MainFeedController {
     @Autowired
     MainFeedIService mainFeedIService;
 
+    @Autowired
+    private JwtService jwtService;
+
     @GetMapping("/main/videos")
     public List<MainFeedDTO> getFeed(
             @RequestHeader(value = "accessToken") String accessToken,
@@ -28,6 +32,9 @@ public class MainFeedController {
             @RequestParam(value = "page_count", defaultValue = "-1") int page_count
     ) {
         System.out.println("accessToken = " + accessToken);
-        return mainFeedIService.getFeed(view, category_id, page_index, page_count);
+        String decodedToken = jwtService.decodeTokenByHeaderString(accessToken);
+        int user_id = Integer.parseInt(decodedToken);
+
+        return mainFeedIService.getFeed(view, category_id, page_index, page_count, user_id);
     }
 }

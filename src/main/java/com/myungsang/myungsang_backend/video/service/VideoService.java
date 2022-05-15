@@ -15,8 +15,8 @@ public class VideoService implements VideoIService {
     private VideoIMapper videoIMapper;
 
     @Override
-    public VideoDTO getVideo(long id) {
-        return videoIMapper.getVideo(id);
+    public VideoDTO getVideo(long id, long user_id) {
+        return videoIMapper.getVideo(id, user_id);
     }
 
     @Override
