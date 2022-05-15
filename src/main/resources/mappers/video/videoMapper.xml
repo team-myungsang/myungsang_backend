@@ -108,4 +108,9 @@
         SET like_cnt = like_cnt - 1
         WHERE id = #{id}
     </update>
+    <delete id="deleteVideo">
+        DELETE
+        FROM myungsang_db.videos
+        WHERE id = #{id};
+    </delete>
 </mapper>

@@ -15,5 +15,5 @@ public interface VideoIMapper {
     void increaseLikeCnt(VideoVO videoVO);
     void decreaseLikeCnt(VideoVO videoVO);
 
-
+    void deleteVideo(long id);
 }

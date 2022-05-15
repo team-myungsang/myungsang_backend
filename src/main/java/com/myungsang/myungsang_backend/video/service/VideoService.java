@@ -51,4 +51,9 @@ public class VideoService implements VideoIService {
     public void unclickLikeButton(VideoVO videoVO) {
         videoIMapper.decreaseLikeCnt(videoVO);
     }
+
+    @Override
+    public void deleteVideo(long id) {
+        videoIMapper.deleteVideo(id);
+    }
 }

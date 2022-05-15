@@ -14,4 +14,6 @@ public interface VideoIService {
     void saveThumbnailFile(long id, long thumbnailFileId);
     void clickLikeButton(VideoVO videoVO);
     void unclickLikeButton(VideoVO videoVO);
+
+    void deleteVideo(long id);
 }

@@ -89,6 +89,28 @@ public class VideoController {
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
+    @DeleteMapping("/videos/{id}")
+    public ResponseEntity<Map<String, Object>> deleteVideo(@RequestHeader("accessToken") String accessToken, @PathVariable long id) {
+        int user_id = 0;
+        if (accessToken != null) {
+            String decodedToken = jwtService.decodeTokenByHeaderString(accessToken);
+            user_id = Integer.parseInt(decodedToken);
+        }
+
+        VideoDTO video = videoIService.getVideo(id, user_id);
+        if (video == null) {
+            Map<String, Object> resultMap = new HashMap<String, Object>();
+            resultMap.put("msg", "Not Found");
+            return new ResponseEntity<>(resultMap, HttpStatus.NOT_FOUND);
+        }
+
+        videoIService.deleteVideo(id);
+
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("msg", "success");
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
+    }
+
     @PostMapping("/videos/{id}/upload_file")
     public Map<String, Object> uploadFile(@PathVariable long id, @RequestParam(value = "video_file", required = false) MultipartFile videoFile, @RequestParam(value = "thumbnail_file", required = false) MultipartFile thumbnailFile) throws IOException {
         String filePath = "uploads/videos/" + id;
