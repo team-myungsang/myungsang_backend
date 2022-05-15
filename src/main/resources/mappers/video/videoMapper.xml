@@ -5,6 +5,7 @@
     <resultMap id="videoMap" type="com.myungsang.myungsang_backend.video.dto.VideoDTO">
         <id property="id" column="id"/>
         <id property="title" column="title"/>
+        <id property="content" column="content"/>
         <id property="likeCnt" column="like_cnt"/>
         <id property="view" column="view"/>
         <id property="path" column="path"/>
@@ -45,6 +46,7 @@
     <select id="getVideo" resultMap="videoMap">
         SELECT video.id,
                video.title,
+               video.content,
                video.like_cnt,
                video.view,
                video.created_at,

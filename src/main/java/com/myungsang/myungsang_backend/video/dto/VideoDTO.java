@@ -17,6 +17,9 @@ public class VideoDTO {
     private String title;
 
     @JsonProperty
+    private String content;
+
+    @JsonProperty
     private FileVO thumbnail_file;
 
     @JsonProperty
